@@ -1,0 +1,45 @@
+group 'com.sinnowa'
+version '1.0'
+
+apply plugin: 'java'
+apply plugin: 'war'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+    maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+    maven { url "http://repo.maven.apache.org/maven2/"}
+    mavenCentral()
+}
+
+dependencies {
+    // servlet-api
+    compile group: 'javax.servlet', name: 'servlet-api', version: '2.5'
+    // https://mvnrepository.com/artifact/javax.servlet/servlet-api
+    //compile group: 'javax.servlet', name: 'servlet-api', version: '3.0-alpha-1'
+
+    //spring相关
+    compile group: 'org.springframework', name: 'spring-webmvc', version: '4.3.3.RELEASE'
+    compile group: 'org.springframework', name: 'spring-orm', version: '4.3.3.RELEASE'
+    compile group: 'org.springframework', name: 'spring-aspects', version: '4.3.3.RELEASE'
+
+    //hibernate jpa相关
+    compile group: 'org.jboss.spec.javax.transaction', name: 'jboss-transaction-api_1.2_spec', version: '1.0.1.Final'
+    compile group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.2.2.Final'
+    //c3p0连接池
+    compile group: 'org.hibernate', name: 'hibernate-c3p0', version: '5.2.2.Final'
+    //ehcahe二级缓存
+    //compile group: 'org.hibernate', name: 'hibernate-ehcache', version: '5.2.2.Final'
+    //mysql
+    compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.39'
+
+    //fastjson
+    compile 'com.alibaba:fastjson:1.2.31'
+
+    providedCompile "javax:javaee-api:6.0"
+
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
