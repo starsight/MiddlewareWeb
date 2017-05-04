@@ -10,11 +10,14 @@
         <property name="hibernate.hbm2ddl.auto">update</property>
         <property name="connection.url">jdbc:mysql://localhost:3306/Middleware</property>
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-        <mapping class="com.sinnowa.entity.DS"/>
-        <mapping class="com.sinnowa.entity.PL"/>
+
         <mapping class="com.sinnowa.entity.DsLisoutputEntity"/>
         <mapping class="com.sinnowa.entity.PlLisoutputEntity"/>
-        <!--<mapping resource="com/sinnowa/entity/DsLisoutputEntity.hbm.xml"/>
-        <mapping resource="com/sinnowa/entity/PlLisoutputEntity.hbm.xml"/>-->
+        <!--
+        <mapping class="com.sinnowa.entity.DS"/>
+        <mapping class="com.sinnowa.entity.PL"/>
+        <mapping resource="com/sinnowa/entity/DsLisoutputEntity.hbm.xml"/>
+        <mapping resource="com/sinnowa/entity/PlLisoutputEntity.hbm.xml"/>
+        -->
     </session-factory>
 </hibernate-configuration>

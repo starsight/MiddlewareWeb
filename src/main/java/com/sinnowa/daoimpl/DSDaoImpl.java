@@ -22,7 +22,7 @@ public class DSDaoImpl implements DSPLDao<DsLisoutputEntity> {
 		Session session=sessionFactory.openSession(); // 生成一个session
 		session.beginTransaction(); // 开启事务
 
-		session.save(ds);
+		session.save(ds);//session.persist(ds);
 
 		session.getTransaction().commit(); // 提交事务
 		session.close(); // 关闭session
