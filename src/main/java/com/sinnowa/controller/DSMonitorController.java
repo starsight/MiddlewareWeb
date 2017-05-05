@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Date;
 
 @RestController
-public class MonitorController {
+@RequestMapping(value="/DS")
+public class DSMonitorController {
 	
 	@Autowired
 	private DSServiceImpl dsService;
@@ -25,12 +26,15 @@ public class MonitorController {
 		//DS ds = new DS(id,enID,name,new Date());
 		//dsService.updateDS(dsJSON);
 
-		String jsonstring = "{\"Abb\":51,\"abbC\":3}";
-		User u1 = JSON.parseObject(jsonstring, new TypeReference<User>(){});
-        User u2 = JSON.parseObject(jsonstring,User.class);
-        //System.out.println(u1.getAbb());
-        //System.out.println(u2.getabb());
+		dsService.getDS();
 
         return "hello";
 	}
+
+    @RequestMapping(value="/updateDSResult",method= RequestMethod.POST)
+    public String updateDSResult(@RequestParam(value="dsJSON", defaultValue="null") String dsJSON,
+                             HttpServletResponse response){
+        dsService.updateDSPL(dsJSON);
+        return "success";
+    }
 }

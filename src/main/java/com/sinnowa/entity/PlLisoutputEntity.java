@@ -29,7 +29,7 @@ public class PlLisoutputEntity {
     private Double normalLOw;
     private Double normalHigh;
     private String indicate;
-    private Byte issend;
+    private Boolean issend;
 
     @Id
     @Column(name = "SAMPLE_ID")
@@ -163,11 +163,11 @@ public class PlLisoutputEntity {
 
     @Basic
     @Column(name = "ISSEND")
-    public Byte getIssend() {
+    public Boolean getIssend() {
         return issend;
     }
 
-    public void setIssend(Byte issend) {
+    public void setIssend(Boolean issend) {
         this.issend = issend;
     }
 

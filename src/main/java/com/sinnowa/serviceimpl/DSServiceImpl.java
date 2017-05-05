@@ -1,5 +1,6 @@
 package com.sinnowa.serviceimpl;
 
+import com.alibaba.fastjson.JSON;
 import com.sinnowa.daoimpl.DSDaoImpl;
 import com.sinnowa.entity.DsLisoutputEntity;
 import com.sinnowa.service.DSPLService;
@@ -14,10 +15,15 @@ public class DSServiceImpl implements DSPLService<DsLisoutputEntity>{
 	private DSDaoImpl dsDao;
 
 	@Override
-	public boolean updateDS(String dsJSON) {
-
-		//dsDao.updateDS();
+	public boolean updateDSPL(String dsJSON) {
+    	DsLisoutputEntity dsLisoutputEntity = JSON.parseObject(dsJSON,DsLisoutputEntity.class);
+		dsDao.updateDSPL(dsLisoutputEntity);
 		return false;
 	}
+
+	public boolean getDS(){
+        dsDao.getDS();
+        return false;
+    }
 
 }

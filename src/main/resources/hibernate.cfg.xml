@@ -17,7 +17,7 @@
         <mapping class="com.sinnowa.entity.DS"/>
         <mapping class="com.sinnowa.entity.PL"/>
         <mapping resource="com/sinnowa/entity/DsLisoutputEntity.hbm.xml"/>
-        <mapping resource="com/sinnowa/entity/PlLisoutputEntity.hbm.xml"/>
-        -->
+        <mapping resource="com/sinnowa/entity/PlLisoutputEntity.hbm.xml"/>-->
+
     </session-factory>
 </hibernate-configuration>

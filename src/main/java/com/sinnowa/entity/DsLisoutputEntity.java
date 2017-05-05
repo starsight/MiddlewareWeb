@@ -1,5 +1,9 @@
 package com.sinnowa.entity;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
+import org.hibernate.hql.internal.ast.tree.BooleanLiteralNode;
+
 import java.sql.Timestamp;
 
 import javax.persistence.Basic;
@@ -38,7 +42,7 @@ public class DsLisoutputEntity {
     private String area;
     private String bed;
     private String department;
-    private Byte issend;
+    private Boolean issend;
 
     @Id
     @Column(name = "SAMPLE_ID")
@@ -262,12 +266,12 @@ public class DsLisoutputEntity {
 
     @Basic
     @Column(name = "ISSEND")
-    public Byte getIssend() {
+    public Boolean getIssend() {
         return issend;
     }
 
-    public void setIssend(Byte issend) {
-        this.issend = issend;
+    public void setIssend(boolean issend) {
+        this.issend =issend;
     }
 
     @Override
