@@ -29,7 +29,7 @@ public class PLMonitorController {
         return "success";
     }
 
-    @RequestMapping(value="/updatePLResult",method= RequestMethod.GET)
+    @RequestMapping(value="/getPLResult",method= RequestMethod.GET)
     public String getDSResult(@RequestParam(value="plJSON", defaultValue="null") String plJSON,
                                  HttpServletResponse response){
         //plService.updateDSPL(plJSON);
