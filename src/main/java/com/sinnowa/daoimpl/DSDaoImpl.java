@@ -32,6 +32,11 @@ public class DSDaoImpl implements DSPLDao<DsLisoutputEntity> {
 		return false;
 	}
 
+	@Override
+	public List<DsLisoutputEntity> getDSPL(String Time) {
+		return null;
+	}
+
 	public boolean getDS(){
 		Session session=sessionFactory.openSession(); // 生成一个session
 		List list= session.createQuery("from DsLisoutputEntity ").list();
