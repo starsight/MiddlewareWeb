@@ -29,4 +29,10 @@ public class PLServiceImpl implements DSPLService<PlLisoutputEntity> {
 		return false;
 	}
 
+	public String getDSPL(String plJSON){
+
+	    plDao.getDSPL(plJSON);
+	    return null;
+    }
+
 }
