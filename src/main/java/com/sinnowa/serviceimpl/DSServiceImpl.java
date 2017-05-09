@@ -15,15 +15,23 @@ public class DSServiceImpl implements DSPLService<DsLisoutputEntity>{
 	private DSDaoImpl dsDao;
 
 	@Override
-	public boolean updateDSPL(String dsJSON) {
-    	DsLisoutputEntity dsLisoutputEntity = JSON.parseObject(dsJSON,DsLisoutputEntity.class);
-		dsDao.updateDSPL(dsLisoutputEntity);
+	public boolean createDSPL(String dsJSON) {
+		DsLisoutputEntity dsLisoutputEntity = JSON.parseObject(dsJSON,DsLisoutputEntity.class);
+		dsDao.createDSPL(dsLisoutputEntity);
 		return false;
 	}
 
-	public boolean getDS(){
-        dsDao.getDS();
-        return false;
-    }
+	@Override
+	public String getDSPL(String plJSON) {
+        //dsDao.getDS();
+		return null;
+	}
+
+	@Override
+	public boolean updateDSPL(String dsJSON) {
+
+		return false;
+	}
+
 
 }

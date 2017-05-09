@@ -20,21 +20,23 @@ public class DSMonitorController {
 	@Autowired
 	private DSServiceImpl dsService;
 	
-	@RequestMapping(value="/hello",method= RequestMethod.GET)
-	public String helloWorld(@RequestParam(value="dsJSON", defaultValue="null") String dsJSON,
+	@RequestMapping(value="/DSResult",method= RequestMethod.GET)
+	public String getDSResult(@RequestParam(value="dsJSON", defaultValue="null") String dsJSON,
 							 HttpServletResponse response){
-		//DS ds = new DS(id,enID,name,new Date());
-		//dsService.updateDS(dsJSON);
-
-		dsService.getDS();
-
-        return "hello";
+		//dsService.getDSPL(dsJSON);
+        return "success";
 	}
 
-    @RequestMapping(value="/updateDSResult",method= RequestMethod.POST)
-    public String updateDSResult(@RequestParam(value="dsJSON", defaultValue="null") String dsJSON,
+    @RequestMapping(value="/DSResult",method= RequestMethod.POST)
+    public String createDSResult(@RequestParam(value="dsJSON", defaultValue="null") String dsJSON,
                              HttpServletResponse response){
-        dsService.updateDSPL(dsJSON);
+        dsService.createDSPL(dsJSON);
         return "success";
     }
+
+	@RequestMapping(value="/DSResult",method= RequestMethod.PUT)
+	public String updateDSResult(@RequestParam(value="dsJSON", defaultValue="null") String dsJSON,
+								 HttpServletResponse response){
+		return "success";
+	}
 }

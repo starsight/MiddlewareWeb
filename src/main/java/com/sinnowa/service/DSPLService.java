@@ -2,5 +2,9 @@ package com.sinnowa.service;
 
 
 public interface DSPLService<T> {
-	 public boolean updateDSPL(String t);
+	boolean createDSPL(String t);
+	String getDSPL(String t);
+	boolean updateDSPL(String t);
+
+
 }

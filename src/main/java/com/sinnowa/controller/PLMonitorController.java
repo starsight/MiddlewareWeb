@@ -21,19 +21,24 @@ public class PLMonitorController {
     private PLServiceImpl plService;
 
 
-    @RequestMapping(value="/updatePLResult",method= RequestMethod.POST)
-    public String updateDSResult(@RequestParam(value="plJSON", defaultValue="null") String plJSON,
+    @RequestMapping(value="/PLResult",method= RequestMethod.POST)
+    public String createPLResult(@RequestParam(value="plJSON", defaultValue="null") String plJSON,
                                  HttpServletResponse response){
-        //plService.updateDSPL(plJSON);
+        plService.createDSPL(plJSON);
+        return "success";
+    }
+
+    @RequestMapping(value="/PLResult",method= RequestMethod.GET)
+    public String getPLResult(@RequestParam(value="plJSON", defaultValue="null") String plJSON,
+                                 HttpServletResponse response){
+        return plService.getDSPL(plJSON);
+    }
+
+    @RequestMapping(value="/PLResult",method= RequestMethod.PUT)
+    public String updatePLResult(@RequestParam(value="plJSON", defaultValue="null") String plJSON,
+                              HttpServletResponse response){
         plService.updateDSPL(plJSON);
         return "success";
     }
 
-    @RequestMapping(value="/getPLResult",method= RequestMethod.GET)
-    public String getDSResult(@RequestParam(value="plJSON", defaultValue="null") String plJSON,
-                                 HttpServletResponse response){
-        //plService.updateDSPL(plJSON);
-        plService.getDSPL(plJSON);
-        return "success";
-    }
 }

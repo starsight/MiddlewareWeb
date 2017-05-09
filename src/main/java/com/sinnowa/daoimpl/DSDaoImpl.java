@@ -11,37 +11,21 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class DSDaoImpl implements DSPLDao<DsLisoutputEntity> {
+public class DSDaoImpl extends BaseDao<DsLisoutputEntity> {
 
 	@Autowired
     private SessionFactory sessionFactory;
-	
+
 	@Override
-	public boolean updateDSPL(DsLisoutputEntity ds) {
-		//Configuration configuration=new Configuration().configure(); // 实例化配置文件
-		//ServiceRegistry serviceRegistry=new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();// 实例化服务登记
-		//SessionFactory sessionFactory=configuration.buildSessionFactory(serviceRegistry); // 获取Session工厂
-		Session session=sessionFactory.openSession(); // 生成一个session
-		session.beginTransaction(); // 开启事务
-
-		session.save(ds);//session.persist(ds);
-
-		session.getTransaction().commit(); // 提交事务
-		session.close(); // 关闭session
-		//sessionFactory.close(); // 关闭session工厂
+	public boolean updateDSPL(DsLisoutputEntity dsLisoutputEntity) {
 		return false;
 	}
 
 	@Override
 	public List<DsLisoutputEntity> getDSPL(String Time) {
-		return null;
-	}
-
-	public boolean getDS(){
 		Session session=sessionFactory.openSession(); // 生成一个session
 		List list= session.createQuery("from DsLisoutputEntity ").list();
-        session.close();
-		return false;
+		session.close();
+		return null;
 	}
-
 }

@@ -17,19 +17,13 @@ import java.util.Date;
 import java.util.List;
 
 @Repository
-public class PLDaoImpl implements DSPLDao<PlLisoutputEntity> {
+public class PLDaoImpl extends BaseDao<PlLisoutputEntity> {
 
 	@Autowired
     private SessionFactory sessionFactory;
 
-	@Override
+    @Override
 	public boolean updateDSPL(PlLisoutputEntity pl){
-		Session session=sessionFactory.openSession(); // 生成一个session
-		session.beginTransaction(); // 开启事务
-		session.save(pl);
-        //session.persist(pl);
-		session.getTransaction().commit(); // 提交事务
-		session.close(); // 关闭session
 		return false;
 	}
 
@@ -52,7 +46,7 @@ public class PLDaoImpl implements DSPLDao<PlLisoutputEntity> {
         String hql = "from PlLisoutputEntity where testTime between ? and ?";
         Query<PlLisoutputEntity> q=session.createQuery(hql,PlLisoutputEntity.class);
         q.setParameter(0,startDate);
-        q.setParameter(0,endDate);
+        q.setParameter(1,endDate);
         List<PlLisoutputEntity> list = q.getResultList();
 
         session.getTransaction().commit(); // 提交事务
