@@ -20,12 +20,6 @@ public class DSMonitorController {
 	@Autowired
 	private DSServiceImpl dsService;
 	
-	@RequestMapping(value="/DSResult",method= RequestMethod.GET)
-	public String getDSResult(@RequestParam(value="dsJSON", defaultValue="null") String dsJSON,
-							 HttpServletResponse response){
-		//dsService.getDSPL(dsJSON);
-        return "success";
-	}
 
     @RequestMapping(value="/DSResult",method= RequestMethod.POST)
     public String createDSResult(@RequestParam(value="dsJSON", defaultValue="null") String dsJSON,
@@ -34,9 +28,18 @@ public class DSMonitorController {
         return "success";
     }
 
-	@RequestMapping(value="/DSResult",method= RequestMethod.PUT)
+    @RequestMapping(value="/DSResultByTime",method= RequestMethod.GET)
+    public String getDSResult(@RequestParam(value="dsJSON", defaultValue="2017-02-16 00:00:00") String dsJSON,
+                              HttpServletResponse response){
+        //dsJSON = "2017-02-16 21:14:29";
+        return dsService.getDSPLByTime(dsJSON);
+    }
+
+    @RequestMapping(value="/DSResult",method= RequestMethod.PUT)
 	public String updateDSResult(@RequestParam(value="dsJSON", defaultValue="null") String dsJSON,
 								 HttpServletResponse response){
+
+        dsService.updateDSPL(dsJSON);
 		return "success";
 	}
 }

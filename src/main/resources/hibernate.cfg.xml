@@ -10,7 +10,7 @@
         <property name="hibernate.hbm2ddl.auto">update</property>
         <property name="connection.url">jdbc:mysql://localhost:3306/Middleware</property>
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-
+        <property name="current_session_context_class">thread</property>
         <mapping class="com.sinnowa.entity.DsLisoutputEntity"/>
         <mapping class="com.sinnowa.entity.PlLisoutputEntity"/>
         <!--

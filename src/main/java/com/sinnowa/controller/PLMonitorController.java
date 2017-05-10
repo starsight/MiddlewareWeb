@@ -28,10 +28,11 @@ public class PLMonitorController {
         return "success";
     }
 
-    @RequestMapping(value="/PLResult",method= RequestMethod.GET)
-    public String getPLResult(@RequestParam(value="plJSON", defaultValue="null") String plJSON,
+    @RequestMapping(value="/PLResultByTime",method= RequestMethod.GET)
+    public String getPLResult(@RequestParam(value="plJSON", defaultValue="2005-01-01 00:00:00") String plJSON,
                                  HttpServletResponse response){
-        return plService.getDSPL(plJSON);
+        //plJSON = "2005-01-01 21:14:29";
+        return plService.getDSPLByTime(plJSON);
     }
 
     @RequestMapping(value="/PLResult",method= RequestMethod.PUT)
