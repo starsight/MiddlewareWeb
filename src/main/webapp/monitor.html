@@ -1,0 +1,37 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="static/js/Chart.js"></script>
+</head>
+<body>
+<h1>hello</h1>
+<canvas id="canvas" height="450" width="600"></canvas>
+<script type="text/javascript" >
+    var ctx = new Chart(document.getElementById("canvas").getContext("2d"));
+    var options = {scaleFontSize: 13, scaleFontColor: "#11a45e"};
+
+    // 线型图
+    var LineChart = {
+        labels: ["Ruby", "jQuery", "Java", "ASP.Net", "PHP"],
+        datasets: [
+            {
+                fillColor : "rgba(220,220,220,0.5)",
+                strokeColor : "rgba(220,220,220,1)",
+                pointColor : "rgba(220,220,220,1)",
+                pointStrokeColor : "#fff",
+                data : [65,59,90,81,56,55,40]
+            },
+            {
+                fillColor : "rgba(151,187,205,0.5)",
+                strokeColor : "rgba(151,187,205,1)",
+                pointColor : "rgba(151,187,205,1)",
+                pointStrokeColor : "#fff",
+                data : [28,48,40,19,96,27,100]
+            }
+        ]
+    };
+    var myLineChart = ctx.Line(LineChart, options);
+
+</script>
+</body>
+</html>
