@@ -15,32 +15,62 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-md-8" align="right">
-            <label for="datetime" class="col-md-10 control-label">选择查询时间：</label>
-            <div class="input-group date form_date col-md-8 col-lg-4" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+        <div class="col-md-8">
+            <label for="datetime" class="col-md-2 control-label">选择查询时间：</label>
+            <div class="input-group date form_date col-md-5 col-lg-2" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
                 <input class="form-control" id="datetime" size="16" type="text" value="" readonly>
                 <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
             </div>
         </div>
         <div class="col-md-2">
-            <label for="device" class="col-md-8 control-label">选择设备：</label>
-            <select class="form-control col-md-8"  id="device">
-                <option>DS</option>
-                <option>PL</option>
-                <option>ALL</option>
+            <select class="form-control">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
             </select>
         </div>
-        <div class="col-md-2" >
-            <button class="btn btn-lg btn-primary btn-block" id="query">查询</button>
+        <div class="col-md-2">
+            <select class="form-control">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+            </select>
         </div>
     </div>
 
     <hr>
 
-</div>
+</div> <!-- /container -->
 
 <div class="container-fluid">
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span4">
+
+            </div>
+            <div class="span4">
+                <div class="btn-group">
+                    <button class="btn">Action</button> <button data-toggle="dropdown" class="btn dropdown-toggle"><span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="#">DS</a>
+                        </li>
+                        <li>
+                            <a href="#">PL</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="span4">
+
+            </div>
+        </div>
+    </div>
 
     <div class="row-fluid">
         <div class="span12">
@@ -152,29 +182,6 @@
         startView: 2,
         minView: 2,
         forceParse: 0
-    });
-
-    document.getElementById('query').addEventListener('click', function() {
-        //console.log($("#datetime").val());
-        var datetime = $("#datetime").val()+" 00:00:00";
-        var device = $("#device").val();
-        var xmlhttp=new XMLHttpRequest();
-
-        xmlhttp.onreadystatechange=function()
-        {
-            if (xmlhttp.readyState==4 && xmlhttp.status==200)
-            {
-                //document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
-                console.log(xmlhttp.responseText);
-            }
-        }
-
-        xmlhttp.open("GET","/MiddlewareWeb/"+device+"/"+device+"ResultByTime?"+"time="+datetime,true);
-        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-        xmlhttp.send();
-
-        //console.log($("#device").val());
-        //window.myLine.update();
     });
 
     //    $("#data").click(function(){

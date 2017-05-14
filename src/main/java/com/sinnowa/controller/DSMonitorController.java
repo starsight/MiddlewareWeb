@@ -29,7 +29,7 @@ public class DSMonitorController {
     }
 
     @RequestMapping(value="/DSResultByTime",method= RequestMethod.GET)
-    public String getDSResult(@RequestParam(value="dsJSON", defaultValue="2017-02-16 00:00:00") String dsJSON,
+    public String getDSResult(@RequestParam(value="time", defaultValue="2017-02-16 00:00:00") String dsJSON,
                               HttpServletResponse response){
         //dsJSON = "2017-02-16 21:14:29";
         return dsService.getDSPLByTime(dsJSON);

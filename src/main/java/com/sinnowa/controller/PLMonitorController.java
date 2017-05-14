@@ -29,7 +29,7 @@ public class PLMonitorController {
     }
 
     @RequestMapping(value="/PLResultByTime",method= RequestMethod.GET)
-    public String getPLResult(@RequestParam(value="plJSON", defaultValue="2005-01-01 00:00:00") String plJSON,
+    public String getPLResult(@RequestParam(value="time", defaultValue="2005-01-01 00:00:00") String plJSON,
                                  HttpServletResponse response){
         //plJSON = "2005-01-01 21:14:29";
         return plService.getDSPLByTime(plJSON);
