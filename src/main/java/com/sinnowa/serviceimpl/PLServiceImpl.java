@@ -79,7 +79,6 @@ public class PLServiceImpl implements DSPLService<PlLisoutputEntity> {
             //jo.add(l);
             joo.put(l.get(0).getSampleId(),l);
         }
-
         //String str2 =JSONArray.toJSONString(joo);
 	    return JSON.toJSONString(joo);
     }
