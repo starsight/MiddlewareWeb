@@ -12,13 +12,6 @@
     <link rel="stylesheet" href="static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="static/css/bootstrap-table.css">
 
-    <script src="static/jquery/jquery-3.2.1.min.js"></script>
-    <script src="static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-    <script src="static/js/bootstrap-table.min.js"></script>
-    <script src="static/js/locales/bootstrap-table-zh-CN.min.js"></script>
-    <!--<script src="${basePath}/js/plugins/bootstrap-table/bootstrap-table-export.js"></script>-->
-    <!--<script src="${basePath}/js/plugins/bootstrap-table/tableExport.js"></script>-->
-
 </head>
 <body>
 
@@ -26,39 +19,31 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-md-8">
-            <label for="datetime" class="col-md-2 control-label">选择查询时间：</label>
-            <div class="input-group date form_date col-md-5 col-lg-2" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+        <div class="col-md-8" align="right">
+            <label for="datetime" class="col-md-10 control-label">选择查询时间：</label>
+            <div class="input-group date form_date col-md-8 col-lg-4" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
                 <input class="form-control" id="datetime" size="16" type="text" value="" readonly>
                 <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
             </div>
         </div>
         <div class="col-md-2">
-            <select class="form-control">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
+            <label for="device" class="col-md-8 control-label">选择设备：</label>
+            <select class="form-control col-md-8"  id="device">
+                <option>PL</option>
+                <option>DS</option>
+                <!--<option>ALL</option>-->
             </select>
         </div>
-        <div class="col-md-2">
-            <select class="form-control">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-            </select>
+        <div class="col-md-2" >
+            <button class="btn btn-lg btn-primary btn-block" id="query">查询</button>
         </div>
     </div>
 
     <hr>
 
-</div> <!-- /container -->
-
-
+</div>
+<p id="myDiv"></p>
 <div class="container">
     <table id="table"
            data-toolbar="#toolbar"
@@ -80,37 +65,212 @@
     </table>
 </div>
 
+<script type="text/javascript" src="static/jquery/jquery-3.2.1.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="static/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+<script type="text/javascript" src="static/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+
+<script src="static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+<script src="static/js/bootstrap-table.min.js"></script>
+<script src="static/js/locales/bootstrap-table-zh-CN.min.js"></script>
 <script type="text/javascript">
+    $('.form_date').datetimepicker({
+        language: 'zh-CN',
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0
+    });
+    $('#datetime').val(nowtime());
+    $('.form_date').datetimepicker('update');
+    //document.getElementById('query').addEventListener('click', function() {
+    //console.log($("#datetime").val());
+    /*var datetime = $("#datetime").val()+" 00:00:00";
+     var device = $("#device").val();
+     var xmlhttp=new XMLHttpRequest();
+
+     xmlhttp.onreadystatechange=function()
+     {
+     if (xmlhttp.readyState==4 && xmlhttp.status==200)
+     {
+     document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+     //console.log(xmlhttp.responseText);
+     var result = toJson(xmlhttp.responseText);
+     var jlength = result.length;
+
+     for (var i = 0; i < jlength; i++) {
+     //result[i]表示获得第i个json对象即JSONObject
+     //result[i]通过.字段名称即可获得指定字段的值
+     var a = result[i].length1;
+     }
+
+     console.log(j);
+     console.log(xmlhttp.responseText);
+
+     }
+     }
+
+     xmlhttp.open("GET","/MiddlewareWeb/"+device+"/"+device+"ResultByTime?"+"time="+datetime,true);
+     xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+     xmlhttp.send();*/
+
+    //console.log($("#device").val());
+    //window.myLine.update();
+
+    //});
+
+    /*function toJson(str){
+     return JSON.parse(str);
+     }*/
+    function nowtime(){//将当前时间转换成yyyymmdd格式
+        var mydate = new Date();
+        var str = "" + mydate.getFullYear()+"-";
+        var mm = mydate.getMonth()+1
+        if(mydate.getMonth()>9){
+            str += mm+"-";
+        }
+        else{
+            str += "0" + mm+"-";
+        }
+        if(mydate.getDate()>9){
+            str += mydate.getDate();
+        }
+        else{
+            str += "0" + mydate.getDate();
+        }
+        return str;
+    }
+
+    $(function(){
+        $("#query").click(function () {
+            var datetime = $("#datetime").val()+" 00:00:00";
+            var device = $("#device").val();
+
+            $.ajax({
+                type: "GET",
+                url: "/MiddlewareWeb/"+device+"/"+device+"ResultByTime?"+"time="+datetime,
+                dataType: "html",
+                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                success: function (msg) {
+                    var jsonText = JSON.parse(msg);
+                    //document.getElementById("myDiv").innerHTML=msg;
+                    var key;
+                    var rows = [];
+                    for (key in jsonText) {
+                        if (jsonText.hasOwnProperty(key)) {
+                            var value = jsonText[key];
+                            for (var i = 0; i < value.length; i++) {
+                                //data[i]表示获得第i个json对象即JSONObject
+                                //data[i]通过.字段名称即可获得指定字段的值
+                                console.log(value[i].fullName);
+                                rows.push({
+                                    barCode: value[i].barCode,
+                                    sampleId: value[i].sampleId,
+                                    firstName: value[i].firstName,
+                                    patientId: value[i].patientId,
+                                    sex: value[i].sex,
+                                    device: value[i].device,
+                                    sampleKind: value[i].sampleKind,
+                                    testTime: value[i].testTime,
+                                    aap:value[i].aap
+                                });
+                                $('table').bootstrapTable({
+                                    onExpandRow: function (index, row, $detail) {
+                                        expandTable($detail, 8);
+                                    }
+                                });
+                            }
+                        }
+                    }
+                    $('#table').bootstrapTable('prepend',rows);
+                    //var $table = $('#table');
+                    //buildTable($table, 7, 1);
+                },
+                error: function () {
+                    alert("error");
+                }
+            });
+        });
+
+    });
+
     $('#table').bootstrapTable({
         columns: [{
-            field: 'id',
-            title: 'Item ID'
+            field: 'barCode',
+            title: '编号'
         }, {
-            field: 'name',
-            title: 'Item Name'
+            field: 'sampleId',
+            title: '样本 ID'
         }, {
-            field: 'price',
-            title: 'Item Price'
+            field: 'patientId',
+            title: '病人 ID'
+        }, {
+            field: 'firstName',
+            title: '病人姓名'
+        }, {
+            field: 'sex',
+            title: '性别'
+        }, {
+            field: 'aap',
+            title: '诱聚剂'
+        }, {
+            field: 'device',
+            title: '测试仪器'
+        }, {
+            field: 'sampleKind',
+            title: '测试类别'
+        }, {
+            field: 'testTime',
+            title: '检测时间'
         }]
+
     });
 
 
-    $('#table').bootstrapTable('load', randomData());
-
-    function randomData() {
-        var startId = ~~(Math.random() * 100),
-            rows = [];
-
-        for (var i = 0; i < 10; i++) {
-            rows.push({
-                id: startId + i,
-                name: 'qwer' + (startId + i),
-                price: '$' + (startId + i)
-            });
-        }
-        return rows;
+    function expandTable($detail, cells) {
+        buildTable($detail.html('<table></table>').find('table'), cells, 1);
     }
 
+    function buildTable($el, cells, rows) {
+        var i, j, row,
+            data = [];
+
+        for (i = 0; i < rows; i++) {
+            row = {};
+            for (j = 0; j < cells; j++) {
+                row['field' + j] = 'Row-' + i + '-' + j;
+            }
+            data.push(row);
+        }
+        $el.bootstrapTable({
+            columns: [{
+                field: 'item',
+                title: '项目名'
+            }, {
+                field: 'fullName',
+                title: '项目全称'
+            }, {
+                field: 'result',
+                title: '结果'
+            }, {
+                field: 'unit',
+                title: '结果单位'
+            }, {
+                field: 'normalLow',
+                title: '正常最低值'
+            }, {
+                field: 'normalHigh',
+                title: '正常最高值'
+            }, {
+                field: 'indicate',
+                title: '提示'
+            }],
+            data: data
+        });
+    }
 </script>
 
 </body>
