@@ -177,15 +177,12 @@
                                     testTime: value[i].testTime,
                                     aap:value[i].aap
                                 });
-                                $('table').bootstrapTable({
-                                    onExpandRow: function (index, row, $detail) {
-                                        expandTable($detail, 8);
-                                    }
-                                });
+
                             }
                         }
                     }
                     $('#table').bootstrapTable('prepend',rows);
+
                     //var $table = $('#table');
                     //buildTable($table, 7, 1);
                 },
@@ -225,8 +222,9 @@
         }, {
             field: 'testTime',
             title: '检测时间'
-        }]
-
+        }],onExpandRow: function (index, row, $detail) {
+            expandTable($detail, 8);
+        }
     });
 
 
