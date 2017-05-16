@@ -83,6 +83,15 @@ public class PLServiceImpl implements DSPLService<PlLisoutputEntity> {
 	    return JSON.toJSONString(joo);
     }
 
+    public String getDSPLBySampleId(String plJSON){
+
+        Object[] objects = new Object[]{plJSON};
+        String hql ="from PlLisoutputEntity where sampleId =?";
+        List<PlLisoutputEntity> list = plDao.getDSPL(hql,objects);
+
+        return JSON.toJSONString(list);
+    }
+
     @Override
     public boolean  updateDSPL(String plJSON) {
 	    //plDao.updateDSPL(null);

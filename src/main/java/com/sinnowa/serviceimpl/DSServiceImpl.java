@@ -6,6 +6,7 @@ import com.sinnowa.daoimpl.DSDaoImpl;
 import com.sinnowa.entity.DsLisoutputEntity;
 import com.sinnowa.entity.DsLisoutputEntityPK;
 import com.sinnowa.entity.DsLisoutputEntity;
+import com.sinnowa.entity.PlLisoutputEntity;
 import com.sinnowa.service.DSPLService;
 import com.sinnowa.util.Utils;
 
@@ -99,6 +100,15 @@ public class DSServiceImpl implements DSPLService<DsLisoutputEntity>{
 
         //String str2 =JSONArray.toJSONString(joo);
         return JSON.toJSONString(joo);
+    }
+
+    public String getDSPLBySampleId(String dsJSON){
+
+        Object[] objects = new Object[]{dsJSON};
+        String hql ="from DsLisoutputEntity where sampleId =?";
+        List<DsLisoutputEntity> list = dsDao.getDSPL(hql,objects);
+
+        return JSON.toJSONString(list);
     }
 
 }

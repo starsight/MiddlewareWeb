@@ -12,6 +12,17 @@
     <link rel="stylesheet" href="static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="static/css/bootstrap-table.css">
 
+
+    <script type="text/javascript" src="static/jquery/jquery-3.2.1.min.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="static/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="static/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+
+    <script src="static/js/bootstrap-table.min.js"></script>
+    <script src="static/js/locales/bootstrap-table-zh-CN.min.js"></script>
+    <script type="text/javascript" src="static/js/bootstrap-table-export.js" charset="UTF-8"></script>
+    <script src="static/js/tableExport.js"></script>
+
 </head>
 <body>
 
@@ -29,13 +40,13 @@
         </div>
         <div class="col-md-2">
             <label for="device" class="col-md-8 control-label">选择设备：</label>
-            <select class="form-control col-md-8"  id="device">
+            <select class="form-control col-md-8" id="device">
                 <option>PL</option>
                 <option>DS</option>
                 <!--<option>ALL</option>-->
             </select>
         </div>
-        <div class="col-md-2" >
+        <div class="col-md-2">
             <button class="btn btn-lg btn-primary btn-block" id="query">查询</button>
         </div>
     </div>
@@ -44,8 +55,14 @@
 
 </div>
 <p id="myDiv"></p>
+<div id="toolbar">
+    <button id="remove" class="btn btn-danger">
+        <i class="glyphicon glyphicon-remove"></i> 清空数据显示
+    </button>
+</div>
 <div class="container">
     <table id="table"
+           data-striped="true"
            data-toolbar="#toolbar"
            data-search="true"
            data-show-refresh="true"
@@ -65,14 +82,10 @@
     </table>
 </div>
 
-<script type="text/javascript" src="static/jquery/jquery-3.2.1.min.js" charset="UTF-8"></script>
-<script type="text/javascript" src="static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="static/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
-<script type="text/javascript" src="static/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 
-<script src="static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-<script src="static/js/bootstrap-table.min.js"></script>
-<script src="static/js/locales/bootstrap-table-zh-CN.min.js"></script>
+
+
+
 <script type="text/javascript">
     $('.form_date').datetimepicker({
         language: 'zh-CN',
@@ -87,71 +100,76 @@
     $('#datetime').val(nowtime());
     $('.form_date').datetimepicker('update');
     //document.getElementById('query').addEventListener('click', function() {
-        //console.log($("#datetime").val());
-        /*var datetime = $("#datetime").val()+" 00:00:00";
-        var device = $("#device").val();
-        var xmlhttp=new XMLHttpRequest();
+    //console.log($("#datetime").val());
+    /*var datetime = $("#datetime").val()+" 00:00:00";
+     var device = $("#device").val();
+     var xmlhttp=new XMLHttpRequest();
 
-        xmlhttp.onreadystatechange=function()
-        {
-            if (xmlhttp.readyState==4 && xmlhttp.status==200)
-            {
-                document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
-                //console.log(xmlhttp.responseText);
-                var result = toJson(xmlhttp.responseText);
-                var jlength = result.length;
+     xmlhttp.onreadystatechange=function()
+     {
+     if (xmlhttp.readyState==4 && xmlhttp.status==200)
+     {
+     document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+     //console.log(xmlhttp.responseText);
+     var result = toJson(xmlhttp.responseText);
+     var jlength = result.length;
 
-                for (var i = 0; i < jlength; i++) {
-                    //result[i]表示获得第i个json对象即JSONObject
-                    //result[i]通过.字段名称即可获得指定字段的值
-                    var a = result[i].length1;
-                }
+     for (var i = 0; i < jlength; i++) {
+     //result[i]表示获得第i个json对象即JSONObject
+     //result[i]通过.字段名称即可获得指定字段的值
+     var a = result[i].length1;
+     }
 
-                console.log(j);
-                console.log(xmlhttp.responseText);
+     console.log(j);
+     console.log(xmlhttp.responseText);
 
-            }
-        }
+     }
+     }
 
-        xmlhttp.open("GET","/MiddlewareWeb/"+device+"/"+device+"ResultByTime?"+"time="+datetime,true);
-        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-        xmlhttp.send();*/
+     xmlhttp.open("GET","/MiddlewareWeb/"+device+"/"+device+"ResultByTime?"+"time="+datetime,true);
+     xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+     xmlhttp.send();*/
 
-        //console.log($("#device").val());
-        //window.myLine.update();
+    //console.log($("#device").val());
+    //window.myLine.update();
 
     //});
 
     /*function toJson(str){
-        return JSON.parse(str);
-    }*/
-    function nowtime(){//将当前时间转换成yyyymmdd格式
+     return JSON.parse(str);
+     }*/
+    function nowtime() {//将当前时间转换成yyyymmdd格式
         var mydate = new Date();
-        var str = "" + mydate.getFullYear()+"-";
-        var mm = mydate.getMonth()+1
-        if(mydate.getMonth()>9){
-            str += mm+"-";
+        var str = "" + mydate.getFullYear() + "-";
+        var mm = mydate.getMonth() + 1
+        if (mydate.getMonth() > 9) {
+            str += mm + "-";
         }
-        else{
-            str += "0" + mm+"-";
+        else {
+            str += "0" + mm + "-";
         }
-        if(mydate.getDate()>9){
+        if (mydate.getDate() > 9) {
             str += mydate.getDate();
         }
-        else{
+        else {
             str += "0" + mydate.getDate();
         }
         return str;
     }
 
-    $(function(){
+    $(function () {
+        $("#remove").click(function () {
+            var rows=[];
+            $('#table').bootstrapTable('load', rows);
+        });
+
         $("#query").click(function () {
-            var datetime = $("#datetime").val()+" 00:00:00";
+            var datetime = $("#datetime").val() + " 00:00:00";
             var device = $("#device").val();
 
             $.ajax({
                 type: "GET",
-                url: "/MiddlewareWeb/"+device+"/"+device+"ResultByTime?"+"time="+datetime,
+                url: "/MiddlewareWeb/" + device + "/" + device + "ResultByTime?" + "time=" + datetime,
                 dataType: "html",
                 contentType: "application/x-www-form-urlencoded; charset=utf-8",
                 success: function (msg) {
@@ -162,38 +180,46 @@
                     for (key in jsonText) {
                         if (jsonText.hasOwnProperty(key)) {
                             var value = jsonText[key];
-                            for (var i = 0; i < value.length; i++) {
-                                //data[i]表示获得第i个json对象即JSONObject
-                                //data[i]通过.字段名称即可获得指定字段的值
-                                console.log(value[i].fullName);
-                                rows.push({
-                                    barCode: value[i].barCode,
-                                    sampleId: value[i].sampleId,
-                                    fullName: value[i].fullName,
-                                    patientId: value[i].patientId,
-                                    sex: value[i].sex,
-                                    device: value[i].device,
-                                    sampleKind: value[i].sampleKind,
-                                    testTime: value[i].testTime
-                                });
-                            }
+                            rows.push({//只获取一个
+                                barCode: value[0].barCode,
+                                sampleId: value[0].sampleId,
+                                firstName: value[0].firstName,
+                                patientId: value[0].patientId,
+                                sex: value[0].sex,
+                                device: value[0].device,
+                                sampleKind: value[0].sampleKind,
+                                testTime: value[0].testTime,
+                                aap: value[0].aap
+                            });
+                            /*for (var i = 0; i < value.length; i++) {
+                             //data[i]表示获得第i个json对象即JSONObject
+                             //data[i]通过.字段名称即可获得指定字段的值
+                             console.log(value[i].fullName);
+                             rows.push({
+                             barCode: value[i].barCode,
+                             sampleId: value[i].sampleId,
+                             firstName: value[i].firstName,
+                             patientId: value[i].patientId,
+                             sex: value[i].sex,
+                             device: value[i].device,
+                             sampleKind: value[i].sampleKind,
+                             testTime: value[i].testTime,
+                             aap:value[i].aap
+                             });
+                             }*/
                         }
                     }
-                    //var a ="{\"aap\":\"23\",\"barCode\":\"2323\",\"fullName\":\"和我\"}";
-                    $('#table').bootstrapTable('load',rows);
-
+                    $('#table').bootstrapTable('prepend', rows);
+                    //var $table = $('#table');
+                    //buildTable($table, 7, 1);
                 },
                 error: function () {
-                    alert("error");
+                    alert("获取数据失败！");
                 }
             });
         });
 
-        /*$("#data").click(function(){
-
-        });*/
     });
-
 
     $('#table').bootstrapTable({
         columns: [{
@@ -206,11 +232,14 @@
             field: 'patientId',
             title: '病人 ID'
         }, {
-            field: 'fullName',
+            field: 'firstName',
             title: '病人姓名'
         }, {
             field: 'sex',
             title: '性别'
+        }, {
+            field: 'aap',
+            title: '诱聚剂'
         }, {
             field: 'device',
             title: '测试仪器'
@@ -220,21 +249,88 @@
         }, {
             field: 'testTime',
             title: '检测时间'
+        }], onExpandRow: function (index, row, $detail) {
+            expandTable($detail, row, 8);
         }
-
-        ]
     });
 
 
+    function expandTable($detail,row, cells) {
+        buildTable($detail.html('<table></table>').find('table'), row, cells, 1);
+    }
+
+    function buildTable($el, row, cells, rows) {
+        var sampleid = row.sampleId;
+        var devicename ="PL";
+        if(row.device.match("DS")=="DS"){
+            devicename="DS";
+        }
+        $.ajax({
+            type: "GET",
+            url: "/MiddlewareWeb/" + devicename+ "/" + devicename+ "ResultBySampleId?" + "sampleid=" + sampleid,
+            dataType: "html",
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            success: function (msg) {
+                var jsonText = JSON.parse(msg);
+                //document.getElementById("myDiv").innerHTML = msg;
+                var rows = [];
+
+                for (var i = 0; i < jsonText.length; i++) {
+                    //data[i]表示获得第i个json对象即JSONObject
+                    //data[i]通过.字段名称即可获得指定字段的值
+                    //console.log(jsonText[i].fullName);
+                    if(jsonText[i].item!="PLTHist"&&jsonText[i].item!="RBCHist"&&jsonText[i].item.match("PAC")!="PAC") {
+                        var normallow;
+                        if(devicename=="PL"){
+                            normallow = jsonText[i].normalLOw;
+                        }else{
+                            normallow = jsonText[i].normalLow;
+                        }
+                        rows.push({
+                            item: jsonText[i].item,
+                            fullName: jsonText[i].fullName,
+                            result: jsonText[i].result,
+                            unit: jsonText[i].unit,
+                            normalLow: normallow,
+                            normalHigh: jsonText[i].normalHigh,
+                            indicate: jsonText[i].indicate
+                        });
+                    }
+                }
+                $el.bootstrapTable('load', rows);
+
+            },
+            error: function () {
+                alert("获取结果数据失败！");
+            }
+        });
+        $el.bootstrapTable({
+            columns: [{
+                field: 'item',
+                title: '项目名'
+            }, {
+                field: 'fullName',
+                title: '项目全称'
+            }, {
+                field: 'result',
+                title: '结果'
+            }, {
+                field: 'unit',
+                title: '结果单位'
+            }, {
+                field: 'normalLow',
+                title: '正常最低值'
+            }, {
+                field: 'normalHigh',
+                title: '正常最高值'
+            }, {
+                field: 'indicate',
+                title: '提示'
+            }]
+        });
+    }
 
 
-
-    //    $("#data").click(function(){
-    //
-    //        console.log($(".datetime").val());
-    //
-    //    });
-    //    console.log($(".datetime").val());
 </script>
 
 </body>

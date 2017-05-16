@@ -28,11 +28,17 @@ public class DSMonitorController {
         return "success";
     }
 
-    @RequestMapping(value="/DSResultByTime",method= RequestMethod.GET)
+    @RequestMapping(value="/DSResultByTime",method= RequestMethod.GET,produces="text/html;charset=UTF-8")
     public String getDSResult(@RequestParam(value="time", defaultValue="2017-02-16 00:00:00") String dsJSON,
                               HttpServletResponse response){
         //dsJSON = "2017-02-16 21:14:29";
         return dsService.getDSPLByTime(dsJSON);
+    }
+
+    @RequestMapping(value="/DSResultBySampleId",method= RequestMethod.GET,produces="text/html;charset=UTF-8")
+    public String getDSResultSampleId(@RequestParam(value="sampleid", defaultValue="201702160025") String dsJSON,
+                                      HttpServletResponse response){
+        return dsService.getDSPLBySampleId(dsJSON);
     }
 
     @RequestMapping(value="/DSResult",method= RequestMethod.PUT)

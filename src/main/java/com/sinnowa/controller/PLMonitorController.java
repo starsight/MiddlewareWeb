@@ -35,6 +35,18 @@ public class PLMonitorController {
         return plService.getDSPLByTime(plJSON);
     }
 
+   /*@RequestMapping(value="/PLListByTime",method= RequestMethod.GET,produces="text/html;charset=UTF-8")
+    public String getPLList(@RequestParam(value="time", defaultValue="2017-05-15 00:00:00") String plJSON,
+                                      HttpServletResponse response){
+        return plService.getDSPLByTime(plJSON);
+    }*/
+
+    @RequestMapping(value="/PLResultBySampleId",method= RequestMethod.GET,produces="text/html;charset=UTF-8")
+    public String getPLResultSampleId(@RequestParam(value="sampleid", defaultValue="000001") String plJSON,
+                              HttpServletResponse response){
+        return plService.getDSPLBySampleId(plJSON);
+    }
+
     @RequestMapping(value="/PLResult",method= RequestMethod.PUT)
     public String updatePLResult(@RequestParam(value="plJSON", defaultValue="null") String plJSON,
                               HttpServletResponse response){
