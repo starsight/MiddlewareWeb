@@ -443,7 +443,7 @@
     }
 
     function expandTable($detail,row, cells) {
-        configPLTRBC.data.datasets.splice(0, 2);
+        configPLTRBC.data.datasets.splice(0, 2);//remove old charts
         configPAC.data.datasets.splice(0, 1);
         buildTable($detail.html('<table></table>').find('table'), row, cells, 1);
     }
