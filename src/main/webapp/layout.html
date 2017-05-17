@@ -12,6 +12,17 @@
     <link rel="stylesheet" href="static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="static/css/bootstrap-table.css">
 
+
+    <script type="text/javascript" src="static/jquery/jquery-3.2.1.min.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="static/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="static/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+
+    <script src="static/js/bootstrap-table.min.js"></script>
+    <script src="static/js/locales/bootstrap-table-zh-CN.min.js"></script>
+    <script type="text/javascript" src="static/js/bootstrap-table-export.js" charset="UTF-8"></script>
+    <script src="static/js/tableExport.js"></script>
+
 </head>
 <body>
 
@@ -44,8 +55,14 @@
 
 </div>
 <p id="myDiv"></p>
+<div id="toolbar">
+    <button id="remove" class="btn btn-danger">
+        <i class="glyphicon glyphicon-remove"></i> 清空数据显示
+    </button>
+</div>
 <div class="container">
     <table id="table"
+           data-striped="true"
            data-toolbar="#toolbar"
            data-search="true"
            data-show-refresh="true"
@@ -65,15 +82,10 @@
     </table>
 </div>
 
-<script type="text/javascript" src="static/jquery/jquery-3.2.1.min.js" charset="UTF-8"></script>
-<script type="text/javascript" src="static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="static/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
-<script type="text/javascript" src="static/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
-<script type="text/javascript" src="static/js/bootstrap-table-export.js" charset="UTF-8"></script>
 
-<script src="static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-<script src="static/js/bootstrap-table.min.js"></script>
-<script src="static/js/locales/bootstrap-table-zh-CN.min.js"></script>
+
+
+
 <script type="text/javascript">
     $('.form_date').datetimepicker({
         language: 'zh-CN',
@@ -146,6 +158,11 @@
     }
 
     $(function () {
+        $("#remove").click(function () {
+            var rows=[];
+            $('#table').bootstrapTable('load', rows);
+        });
+
         $("#query").click(function () {
             var datetime = $("#datetime").val() + " 00:00:00";
             var device = $("#device").val();
@@ -197,7 +214,7 @@
                     //buildTable($table, 7, 1);
                 },
                 error: function () {
-                    alert("error");
+                    alert("获取数据失败！");
                 }
             });
         });
@@ -278,6 +295,8 @@
                             normalHigh: jsonText[i].normalHigh,
                             indicate: jsonText[i].indicate
                         });
+                    } else{
+
                     }
                 }
                 $el.bootstrapTable('load', rows);
@@ -312,6 +331,8 @@
             }]
         });
     }
+
+
 </script>
 
 </body>
