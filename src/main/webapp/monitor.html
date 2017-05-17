@@ -96,9 +96,26 @@
 
 <hr>
 
-<div style="width:75%;">
-    <canvas id="canvas"></canvas>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6" >
+
+            <div style="width:85%;" align="bottom">
+                <canvas id="canvasPAC"></canvas>
+            </div>
+
+        </div>
+        <div class="col-md-6">
+
+            <div style="width:100%;">
+                <canvas id="canvasPLTRBC"></canvas>
+            </div>
+
+        </div>
+    </div>
+    <hr>
 </div>
+
 
 
 
@@ -272,42 +289,77 @@
         }
     });
 
-    window.onload = function() {
+    /*window.onload = function() {
         initLine();
-    };
+    };*/
 
-    var xaxis=[];
+    var canvasPLTRBCLabel=[];
     for(var i=0;i<255;i++){
-        xaxis[i] =i;
+        canvasPLTRBCLabel[i] =i;
     }
-    Chart.defaults.global.elements.point.hitRadius=0;
-    var config = {
+
+    var configPLTRBC = {
         type: 'line',
         data: {
-            labels: xaxis,
-            datasets: [{
-                label: "My First dataset",
-                backgroundColor: window.chartColors.red,
-                borderColor: window.chartColors.red,
-                pointRadius:0,
-                data: [
-                    randomScalingFactor(),
-                    randomScalingFactor(),
-                    randomScalingFactor(),
-                    randomScalingFactor(),
-                    randomScalingFactor(),
-                    randomScalingFactor(),
-                    randomScalingFactor()
-                ],
-                fill: false,
-            }]
+            labels: canvasPLTRBCLabel,
+            datasets: []
         },
         options: {
             responsive: true,
             title:{
-                display:true,
+                display:false,
                 text:'Chart.js Line Chart'
             },
+            legend: {
+                labels: {
+                    usePointStyle: false
+                }
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false,
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true
+            },
+
+            scales: {
+                xAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: false,
+                        labelString: 'Month'
+                    },
+                    ticks: {
+                        autoSkip: true,
+                        maxTicksLimit: 20
+                    },gridLines:{
+                        display:false
+                    }
+                }],
+                yAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: false,
+                        labelString: 'Value'
+                    },
+                    ticks:{
+                        beginAtZero:true
+                    }
+                }]
+            }
+        }
+    };
+
+    var configPAC = {
+        type: 'line',
+        data: {
+            labels: [1,2,3,4,5],
+            datasets: []
+        },
+        options: {
+            responsive: true,
             legend: {
                 labels: {
                     usePointStyle: false
@@ -325,22 +377,18 @@
                 xAxes: [{
                     display: true,
                     scaleLabel: {
-                        display: true,
+                        display: false,
                         labelString: 'Month'
-                    },
-                    ticks: {
-                        beginAtZero:true,
-                        suggestedMax: 10,
-                        suggestedMin: 5,
-                        stepSize: 1
+                    },gridLines:{
+                        display:false
                     }
                 }],
                 yAxes: [{
                     display: true,
                     scaleLabel: {
-                        display: true,
+                        display: false,
                         labelString: 'Value'
-                    }
+                    },
                 }]
             }
         }
@@ -348,18 +396,38 @@
 
     function initLine(){
 
-        var ctx = document.getElementById("canvas").getContext("2d");
-        window.myLine = new Chart(ctx, config);
+        var ctx = document.getElementById("canvasPLTRBC").getContext("2d");
+        window.myLinePLTRBC = new Chart(ctx, configPLTRBC);
+        var ctxpac = document.getElementById("canvasPAC").getContext("2d");
+        window.myLinePAC = new Chart(ctxpac, configPAC);
     }
 
-    function showRBCCharts(result) {
+    function showPACChart(result) {
 
-        //var colorName = colorNames[config.data.datasets.length % colorNames.length];
-        //var newColor = window.chartColors[colorName];
         var newDataset = {
-            label: 'RBC',
+            label: 'PAC 直方图',
             backgroundColor: window.chartColors.blue,
             borderColor: window.chartColors.blue,
+            data: [],
+            fill: false
+        };
+
+        for (var i = 0; i < result.length; i++)
+        {
+            newDataset.data.push(result[i]);
+        }
+        //newDataset.pointRadius =0;
+        configPAC.data.datasets.push(newDataset);
+        window.myLinePAC.update();
+    }
+
+    function showPLTRBCCharts(result,label,color1,color2) {
+
+
+        var newDataset = {
+            label: label,
+            backgroundColor: color1,
+            borderColor: color2,
             data: [],
             fill: false
         };
@@ -369,11 +437,14 @@
             newDataset.data.push(parseInt(result.substr(j, 2), 16));
             j = j + 2;
         }
-        config.data.datasets.push(newDataset);
-        window.myLine.update();
+        newDataset.pointRadius =0;
+        configPLTRBC.data.datasets.push(newDataset);
+        window.myLinePLTRBC.update();
     }
 
     function expandTable($detail,row, cells) {
+        configPLTRBC.data.datasets.splice(0, 2);
+        configPAC.data.datasets.splice(0, 1);
         buildTable($detail.html('<table></table>').find('table'), row, cells, 1);
     }
 
@@ -383,7 +454,7 @@
         if(row.device.match("DS")=="DS"){
             devicename="DS";
         }else{//PL
-            //initLine();//init chart
+            initLine();//init chart
         }
         $.ajax({
             type: "GET",
@@ -394,7 +465,7 @@
                 var jsonText = JSON.parse(msg);
                 //document.getElementById("myDiv").innerHTML = msg;
                 var rows = [];
-
+                var pacResult = [0,0,0,0,0],pacCount=0;
                 for (var i = 0; i < jsonText.length; i++) {
                     //data[i]表示获得第i个json对象即JSONObject
                     //data[i]通过.字段名称即可获得指定字段的值
@@ -417,11 +488,31 @@
                         });
                     }else{//show charts
                         if(jsonText[i].item=="RBCHist"){
-                            showRBCCharts(jsonText[i].result);
+                            showPLTRBCCharts(jsonText[i].result,'RBC 直方图',window.chartColors.green,window.chartColors.green);
                         }else if(jsonText[i].item=="PLTHist"){
-
+                            showPLTRBCCharts(jsonText[i].result,'PLT 直方图',window.chartColors.red,window.chartColors.red);
+                        }else{
+                            if(jsonText[i].item=="PAC1"){
+                                pacResult[0] = jsonText[i].result;
+                                pacCount++;
+                            }else if(jsonText[i].item=="PAC2"){
+                                pacResult[1] = jsonText[i].result;
+                                pacCount++;
+                            }else if(jsonText[i].item=="PAC3"){
+                                pacResult[2] = jsonText[i].result;
+                                pacCount++;
+                            }else if(jsonText[i].item=="PAC4"){
+                                pacResult[3] = jsonText[i].result;
+                                pacCount++;
+                            }else if(jsonText[i].item=="PAC5"){
+                                pacResult[4] = jsonText[i].result;
+                                pacCount++;
+                            }
+                            if(pacCount==5){
+                                showPACChart(pacResult);
+                                pacCount++;
+                            }
                         }
-                        //document.getElementById("myDiv").innerHTML =jsonText[i].result;
                     }
                 }
                 $el.bootstrapTable('load', rows);
