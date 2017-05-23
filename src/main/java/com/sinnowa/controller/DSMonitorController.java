@@ -6,6 +6,7 @@ import com.sinnowa.entity.User;
 import com.sinnowa.serviceimpl.DSServiceImpl;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,10 +22,11 @@ public class DSMonitorController {
 	private DSServiceImpl dsService;
 	
 
-    @RequestMapping(value="/DSResult",method= RequestMethod.POST)
+    @RequestMapping(value="/DSResult/{DeviceName}",method= RequestMethod.POST)
     public String createDSResult(@RequestParam(value="dsJSON", defaultValue="null") String dsJSON,
+                                 @PathVariable("DeviceName") String deviceName,
                              HttpServletResponse response){
-        dsService.createDSPL(dsJSON);
+        dsService.createDSPL(dsJSON,deviceName);
         return "success";
     }
 
@@ -41,10 +43,10 @@ public class DSMonitorController {
         return dsService.getDSPLBySampleId(dsJSON);
     }
 
-    @RequestMapping(value="/DSResult",method= RequestMethod.PUT)
+    @RequestMapping(value="/DSResult/{DeviceName}",method= RequestMethod.PUT)
 	public String updateDSResult(@RequestParam(value="dsJSON", defaultValue="null") String dsJSON,
+								 @PathVariable("DeviceName") String deviceName,
 								 HttpServletResponse response){
-
         dsService.updateDSPL(dsJSON);
 		return "success";
 	}

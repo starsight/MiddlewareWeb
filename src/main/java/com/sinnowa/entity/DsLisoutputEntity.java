@@ -43,6 +43,7 @@ public class DsLisoutputEntity {
     private String bed;
     private String department;
     private Boolean issend;
+    private String deviceName;
 
     @Id
     @Column(name = "SAMPLE_ID")
@@ -274,6 +275,16 @@ public class DsLisoutputEntity {
         this.issend =issend;
     }
 
+    @Basic
+    @Column(name = "DeviceName")
+    public String getDeviceName() {
+        return deviceName;
+    }
+
+    public void setDeviceName(String deviceName) {
+        this.deviceName = deviceName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -304,6 +315,7 @@ public class DsLisoutputEntity {
         if (bed != null ? !bed.equals(that.bed) : that.bed != null) return false;
         if (department != null ? !department.equals(that.department) : that.department != null) return false;
         if (issend != null ? !issend.equals(that.issend) : that.issend != null) return false;
+        if (deviceName != null ? !deviceName.equals(that.deviceName) : that.deviceName != null) return false;
 
         return true;
     }
@@ -333,6 +345,8 @@ public class DsLisoutputEntity {
         result1 = 31 * result1 + (bed != null ? bed.hashCode() : 0);
         result1 = 31 * result1 + (department != null ? department.hashCode() : 0);
         result1 = 31 * result1 + (issend != null ? issend.hashCode() : 0);
+        result1 = 31 * result1 + (deviceName != null ? deviceName.hashCode() : 0);
+
         return result1;
     }
 }

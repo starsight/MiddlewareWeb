@@ -31,9 +31,10 @@ public class PLServiceImpl implements DSPLService<PlLisoutputEntity> {
     private PLDaoImpl plDao;
 
     @Override
-    public boolean createDSPL(String plJSON) {
+    public boolean createDSPL(String plJSON,String deviceName) {
         List<PlLisoutputEntity> list=new ArrayList<PlLisoutputEntity>(JSONArray.parseArray(plJSON,PlLisoutputEntity.class));
         for (PlLisoutputEntity pl :list) {
+            pl.setDevice(deviceName);
             plDao.save(pl);
         }
         return false;

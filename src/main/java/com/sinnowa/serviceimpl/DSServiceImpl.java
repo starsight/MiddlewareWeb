@@ -31,8 +31,9 @@ public class DSServiceImpl implements DSPLService<DsLisoutputEntity>{
 	private DSDaoImpl dsDao;
 
 	@Override
-	public boolean createDSPL(String dsJSON) {
+	public boolean createDSPL(String dsJSON,String devicename) {
 		DsLisoutputEntity dsLisoutputEntity = JSON.parseObject(dsJSON,DsLisoutputEntity.class);
+		dsLisoutputEntity.setDeviceName(devicename);
 		dsDao.save(dsLisoutputEntity);
 		return false;
 	}
