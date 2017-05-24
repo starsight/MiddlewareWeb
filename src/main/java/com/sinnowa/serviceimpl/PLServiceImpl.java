@@ -41,22 +41,18 @@ public class PLServiceImpl implements DSPLService<PlLisoutputEntity> {
     }
 
 
-	public String getDSPLByTime(String plJSON){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        //String str = "2017-05-24 21:14:29";
-        Date baseDate,startDate=null,endDate=null;
-        try {
-            baseDate = sdf.parse(plJSON);
-            startDate = Utils.getStartTimeOfDay(baseDate);
-            endDate = Utils.getEndTimeOfDay(baseDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+	public String getDSPLByTime(Object[] objects){
 
-        Object[] objects = new Object[]{startDate,endDate};
         String hql ="from PlLisoutputEntity where testTime between ? and ?";
         List<PlLisoutputEntity> list = plDao.getDSPL(hql,objects);
 
+        JSONObject jo = getPlJSONObject(list);
+        //String str2 =JSONArray.toJSONString(joo);
+	    return JSON.toJSONString(jo);
+    }
+
+
+    public JSONObject getPlJSONObject(List<PlLisoutputEntity> list){
         HashMap<String,List<PlLisoutputEntity>> hashMap = new HashMap<>();
         for(PlLisoutputEntity pl :list){
             if(hashMap.get(pl.getSampleId())==null){
@@ -80,8 +76,7 @@ public class PLServiceImpl implements DSPLService<PlLisoutputEntity> {
             //jo.add(l);
             joo.put(l.get(0).getSampleId(),l);
         }
-        //String str2 =JSONArray.toJSONString(joo);
-	    return JSON.toJSONString(joo);
+        return joo;
     }
 
     public String getDSPLBySampleId(String plJSON){

@@ -59,22 +59,19 @@ public class DSServiceImpl implements DSPLService<DsLisoutputEntity>{
 		return false;
 	}
 
-    public String getDSPLByTime(String dsJSON){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        //String str = "2017-05-24 21:14:29";
-        Date baseDate,startDate=null,endDate=null;
-        try {
-            baseDate = sdf.parse(dsJSON);
-            startDate = Utils.getStartTimeOfDay(baseDate);
-            endDate = Utils.getEndTimeOfDay(baseDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+    public String getDSPLByTime(Object[] objects){
 
-        Object[] objects = new Object[]{startDate,endDate};
         String hql ="from DsLisoutputEntity where time between ? and ?";
         List<DsLisoutputEntity> list = dsDao.getDSPL(hql,objects);
 
+
+        JSONObject jo = getDsJSONObject(list);
+        //String str2 =JSONArray.toJSONString(joo);
+
+        return JSON.toJSONString(jo);
+    }
+
+    public  JSONObject getDsJSONObject(List<DsLisoutputEntity> list){
         HashMap<String,List<DsLisoutputEntity>> hashMap = new HashMap<>();
         for(DsLisoutputEntity pl :list){
             if(hashMap.get(pl.getSampleId())==null){
@@ -87,7 +84,6 @@ public class DSServiceImpl implements DSPLService<DsLisoutputEntity>{
                 hashMap.put(pl.getSampleId(),a);
             }
         }
-
         JSONObject joo = new JSONObject();
 
         Collection<List<DsLisoutputEntity>> a = hashMap.values();
@@ -99,8 +95,7 @@ public class DSServiceImpl implements DSPLService<DsLisoutputEntity>{
             joo.put(l.get(0).getSampleId(),l);
         }
 
-        //String str2 =JSONArray.toJSONString(joo);
-        return JSON.toJSONString(joo);
+        return joo;
     }
 
     public String getDSPLBySampleId(String dsJSON){

@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.sinnowa.entity.User;
 import com.sinnowa.serviceimpl.DSServiceImpl;
+import com.sinnowa.util.Utils;
+
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,13 +34,20 @@ public class DSMonitorController {
 
     @RequestMapping(value="/DSResultByTime",method= RequestMethod.GET,produces="text/html;charset=UTF-8")
     public String getDSResult(@RequestParam(value="time", defaultValue="2017-02-16 00:00:00") String dsJSON,
+                              @RequestParam(value="type",defaultValue = "ONE_DAY") String type,
                               HttpServletResponse response){
         //dsJSON = "2017-02-16 21:14:29";
-        return dsService.getDSPLByTime(dsJSON);
+        Object[] objects;
+        if("ONE_DAY".equals(type)){
+            objects = Utils.getStartEndDate(dsJSON);
+        }else{
+            objects = Utils.getNewSampleDate(dsJSON);
+        }
+        return dsService.getDSPLByTime(objects);
     }
 
     @RequestMapping(value="/DSResultBySampleId",method= RequestMethod.GET,produces="text/html;charset=UTF-8")
-    public String getDSResultSampleId(@RequestParam(value="sampleid", defaultValue="201702160025") String dsJSON,
+    public String getDSResultSampleId(@RequestParam(value="sampleid", defaultValue="201702160019") String dsJSON,
                                       HttpServletResponse response){
         return dsService.getDSPLBySampleId(dsJSON);
     }

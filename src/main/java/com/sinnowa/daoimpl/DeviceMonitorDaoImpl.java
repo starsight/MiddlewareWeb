@@ -1,6 +1,7 @@
 package com.sinnowa.daoimpl;
 
 import com.sinnowa.dao.DeviceMonitorDao;
+import com.sinnowa.entity.DeviceinfoEntity;
 import com.sinnowa.entity.DsLisoutputEntity;
 import com.sinnowa.entity.PlLisoutputEntity;
 import com.sinnowa.util.Utils;
@@ -51,4 +52,44 @@ public class DeviceMonitorDaoImpl extends BaseDao implements DeviceMonitorDao {
 
         return devicenameList;
     }
+
+    public List<DsLisoutputEntity> getDeviceNewDsSample(String deviceName,Date startDate){
+        String dsHql ="from DsLisoutputEntity where time between ? and ?";
+        List<DsLisoutputEntity> dsList =getDSPL(dsHql,new Object[]{startDate,new Date()});
+        return dsList;
+    }
+
+    public List<PlLisoutputEntity> getDeviceNewPlSample(String deviceName,Date startDate){
+        String plHql ="from PlLisoutputEntity where testTime between ? and ?";
+        List<PlLisoutputEntity> plList =getDSPL(plHql,new Object[]{startDate,new Date()});
+        return plList;
+    }
+
+    @Override
+    public DeviceinfoEntity getDeviceInfo(String deviceName){
+        DeviceinfoEntity device = (DeviceinfoEntity) get(DeviceinfoEntity.class,deviceName);
+        return device;
+    }
+
+    @Override
+    public boolean updateDeviceInfo(DeviceinfoEntity device){
+        update(device);
+        return true;
+    }
+
+
+    public boolean updateLastActiveTime(DeviceinfoEntity device) {
+        Date date = new Date();
+        device.setLastActiveTime(new java.sql.Timestamp(date.getTime()));
+
+        return false;
+    }
+
+    public boolean updateLastQueryTime(DeviceinfoEntity device) {
+        Date date = new Date();
+        device.setLastQueryTime(new java.sql.Timestamp(date.getTime()));
+
+        return false;
+    }
+
 }

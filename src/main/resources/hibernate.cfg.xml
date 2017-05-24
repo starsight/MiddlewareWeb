@@ -13,6 +13,7 @@
         <property name="current_session_context_class">thread</property>
         <mapping class="com.sinnowa.entity.DsLisoutputEntity"/>
         <mapping class="com.sinnowa.entity.PlLisoutputEntity"/>
+        <mapping class="com.sinnowa.entity.DeviceinfoEntity"/>
         <!--
         <mapping class="com.sinnowa.entity.DS"/>
         <mapping class="com.sinnowa.entity.PL"/>
