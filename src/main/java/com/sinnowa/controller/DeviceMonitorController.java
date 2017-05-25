@@ -1,9 +1,11 @@
 package com.sinnowa.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.sinnowa.serviceimpl.DSServiceImpl;
 import com.sinnowa.serviceimpl.DeviceMonitorServiceImpl;
+import com.sinnowa.serviceimpl.PLServiceImpl;
 import com.sinnowa.util.Utils;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -27,6 +30,9 @@ public class DeviceMonitorController {
 
     @Autowired
     private DSServiceImpl dsService;
+    @Autowired
+    private PLServiceImpl plService;
+
 
     @Autowired
     private DeviceMonitorServiceImpl deviceMonitorService;
@@ -112,9 +118,14 @@ public class DeviceMonitorController {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 //jsonObject.put("NewSample",sdf.format(new Date(l)));
 
-                json = dsService.getDSPLByTime(new Object[]{new Date(l),new Date()});
-
-                //json = jsonObject.toJSONString();
+                JSONObject jo = dsService.getDSPLByTime(new Object[]{new Date(l),new Date()});
+                JSONObject jo2 =  plService.getDSPLByTime(new Object[]{new Date(l),new Date()});
+                Set<String> set =jo.keySet();
+                for(String s:set){
+                    JSONArray ja = jo.getJSONArray(s);
+                    jo2.put(s,ja);
+                }
+                json = JSON.toJSONString(jo2);
 
             }
             default:break;

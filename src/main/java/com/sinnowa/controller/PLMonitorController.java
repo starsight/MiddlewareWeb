@@ -1,5 +1,7 @@
 package com.sinnowa.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.sinnowa.serviceimpl.DSServiceImpl;
 import com.sinnowa.serviceimpl.PLServiceImpl;
 import com.sinnowa.util.Utils;
@@ -36,7 +38,8 @@ public class PLMonitorController {
                                  HttpServletResponse response){
         //plJSON = "2005-01-01 21:14:29";
         Object[] objects =Utils.getStartEndDate(plJSON);
-        return plService.getDSPLByTime(objects);
+        JSONObject jo = plService.getDSPLByTime(objects);
+        return JSON.toJSONString(jo);
     }
 
    /*@RequestMapping(value="/PLListByTime",method= RequestMethod.GET,produces="text/html;charset=UTF-8")

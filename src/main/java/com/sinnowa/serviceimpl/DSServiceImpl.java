@@ -59,7 +59,7 @@ public class DSServiceImpl implements DSPLService<DsLisoutputEntity>{
 		return false;
 	}
 
-    public String getDSPLByTime(Object[] objects){
+    public JSONObject getDSPLByTime(Object[] objects){
 
         String hql ="from DsLisoutputEntity where time between ? and ?";
         List<DsLisoutputEntity> list = dsDao.getDSPL(hql,objects);
@@ -68,7 +68,7 @@ public class DSServiceImpl implements DSPLService<DsLisoutputEntity>{
         JSONObject jo = getDsJSONObject(list);
         //String str2 =JSONArray.toJSONString(joo);
 
-        return JSON.toJSONString(jo);
+        return jo;
     }
 
     public  JSONObject getDsJSONObject(List<DsLisoutputEntity> list){

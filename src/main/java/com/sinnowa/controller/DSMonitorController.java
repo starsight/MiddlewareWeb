@@ -1,6 +1,7 @@
 package com.sinnowa.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.sinnowa.entity.User;
 import com.sinnowa.serviceimpl.DSServiceImpl;
@@ -38,12 +39,11 @@ public class DSMonitorController {
                               HttpServletResponse response){
         //dsJSON = "2017-02-16 21:14:29";
         Object[] objects;
-        if("ONE_DAY".equals(type)){
+        //if("ONE_DAY".equals(type)){
             objects = Utils.getStartEndDate(dsJSON);
-        }else{
-            objects = Utils.getNewSampleDate(dsJSON);
-        }
-        return dsService.getDSPLByTime(objects);
+        //}
+        JSONObject jo = dsService.getDSPLByTime(objects);
+        return JSON.toJSONString(jo);
     }
 
     @RequestMapping(value="/DSResultBySampleId",method= RequestMethod.GET,produces="text/html;charset=UTF-8")

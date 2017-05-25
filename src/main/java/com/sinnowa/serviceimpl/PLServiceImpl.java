@@ -41,14 +41,14 @@ public class PLServiceImpl implements DSPLService<PlLisoutputEntity> {
     }
 
 
-	public String getDSPLByTime(Object[] objects){
+	public JSONObject getDSPLByTime(Object[] objects){
 
         String hql ="from PlLisoutputEntity where testTime between ? and ?";
         List<PlLisoutputEntity> list = plDao.getDSPL(hql,objects);
 
         JSONObject jo = getPlJSONObject(list);
         //String str2 =JSONArray.toJSONString(joo);
-	    return JSON.toJSONString(jo);
+	    return jo;
     }
 
 
