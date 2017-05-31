@@ -47,6 +47,11 @@ public class DeviceMonitorServiceImpl implements DeviceMonitorService{
         return state;
     }
 
+    /***
+     * @param deviceName 设备名
+     * @return 上次查询时间（若多余一小时以一小时位上限）
+     * 功能：获取设备上次的查询时间，同时更新本次查询时间到数据库
+     */
     @Override
     public long getNewSampleInfoService(String deviceName) {
         DeviceinfoEntity device= deviceMonitorDao.getDeviceInfo(deviceName);
@@ -109,6 +114,11 @@ public class DeviceMonitorServiceImpl implements DeviceMonitorService{
         DeviceinfoEntity device= deviceMonitorDao.getDeviceInfo(deviceName);
         Date date = device.getLastActiveTime();
         return date;
+    }
+
+    @Override
+    public DeviceinfoEntity getAllDeviceInfoService(String deviceName) {
+        return deviceMonitorDao.getDeviceInfo(deviceName);
     }
 
 

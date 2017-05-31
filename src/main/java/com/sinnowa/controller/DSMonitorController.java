@@ -33,9 +33,13 @@ public class DSMonitorController {
         return "success";
     }
 
+    /**
+     * @param dsJSON 时间
+     * @param response  暂时无用
+     * @return
+     */
     @RequestMapping(value="/DSResultByTime",method= RequestMethod.GET,produces="text/html;charset=UTF-8")
     public String getDSResult(@RequestParam(value="time", defaultValue="2017-02-16 00:00:00") String dsJSON,
-                              @RequestParam(value="type",defaultValue = "ONE_DAY") String type,
                               HttpServletResponse response){
         //dsJSON = "2017-02-16 21:14:29";
         Object[] objects;

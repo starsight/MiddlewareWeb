@@ -71,6 +71,11 @@ public class DSServiceImpl implements DSPLService<DsLisoutputEntity>{
         return jo;
     }
 
+    /**
+     * @param list
+     * @return
+     * 功能： 把所有ID重复的信息删去，即只留下不同SampleId的数据，获取到的是每个SmapleId的第一条数据，最终有效的只是基本的信息，检测数据没有用（因为不全）
+     */
     public  JSONObject getDsJSONObject(List<DsLisoutputEntity> list){
         HashMap<String,List<DsLisoutputEntity>> hashMap = new HashMap<>();
         for(DsLisoutputEntity pl :list){
@@ -79,9 +84,10 @@ public class DSServiceImpl implements DSPLService<DsLisoutputEntity>{
                 listtemp.add(pl);
                 hashMap.put(pl.getSampleId(),listtemp);
             }else{
-                List<DsLisoutputEntity> a = hashMap.get(pl.getSampleId());
-                a.add(pl);
-                hashMap.put(pl.getSampleId(),a);
+                //去除重复 不注释则检测数据能完全发送出来
+                //List<DsLisoutputEntity> a = hashMap.get(pl.getSampleId());
+                //a.add(pl);
+                //hashMap.put(pl.getSampleId(),a);
             }
         }
         JSONObject joo = new JSONObject();

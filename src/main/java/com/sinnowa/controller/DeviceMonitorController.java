@@ -3,6 +3,7 @@ package com.sinnowa.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.sinnowa.entity.DeviceinfoEntity;
 import com.sinnowa.serviceimpl.DSServiceImpl;
 import com.sinnowa.serviceimpl.DeviceMonitorServiceImpl;
 import com.sinnowa.serviceimpl.PLServiceImpl;
@@ -47,18 +48,35 @@ public class DeviceMonitorController {
     * 仪器的检测样本个数
      * 根据时间段区分,先检测样本总数，再每个时间段的样本数量
     * */
-    @RequestMapping(value="/{DeviceName}/SampleSum",method=RequestMethod.GET)
+    /*@RequestMapping(value="/{DeviceName}/SampleSum",method=RequestMethod.GET)
     public String getDeviceTestCount(@PathVariable("DeviceName") String deviceName,
             HttpServletResponse response){
         int count =0;
         return null;
-    }
+    }*/
 
+    /**
+     *
+     * @param deviceName 查询的设备名
+     * @param deviceItem 查询的设备项
+     * @return String json 结果JSON串
+     * 功能：根据URL的Name和Item选择不同的服务项目，封装后的JSON串都是带DeviceName标签字段的
+     * 对于样本检测数，先发送总的SampleCount，再根据每两小时一个结果发12个SampleNum，标号SampleNum0，2,4...22
+     * 对于新样本信息，会依次查询DS，PL设备，再拼装成一个JSON串，如果上次查询时间大于一小时，以一小时查询为上限进行查询
+     */
     @RequestMapping(value = "/{DeviceName}/{DeviceItem}", method = RequestMethod.GET,produces="text/html;charset=UTF-8")
     public String getDeviceState(@PathVariable("DeviceName") String deviceName,
                                  @PathVariable("DeviceItem") String deviceItem){
         String json = null;
         switch(deviceItem){
+            case "AllDeviceInfo":{
+                DeviceinfoEntity deviceinfoEntity = deviceMonitorService.getAllDeviceInfoService(deviceName);
+                JSONObject jsonObject =new JSONObject();
+                jsonObject.put("DeviceName",deviceName);
+                jsonObject.put("AllDeviceInfo0",deviceinfoEntity);
+                json = jsonObject.toJSONString();
+                break;
+            }
             case "State":{
                 String temp = deviceMonitorService.getDeviceStateService(deviceName);
                 JSONObject jsonObject =new JSONObject();
