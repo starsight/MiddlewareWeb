@@ -8,6 +8,7 @@ import com.sinnowa.util.Utils;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -101,6 +102,23 @@ public class BaseDao<T> implements DSPLDao<T>{
 
         session.getTransaction().commit(); // 提交事务
         //session.close(); // 关闭session
+        return list;
+    }
+
+    /**
+     * 查询所有的记录
+     */
+    public List<T> selectAll() {
+        List<T> list = null;
+        try {
+            Session session = getSessionFactory().getCurrentSession();
+            Transaction tran = session.beginTransaction();
+            Query q = session.createQuery("from DeviceinfoEntity");
+            list = q.list();
+            tran.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return list;
     }
 }

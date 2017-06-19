@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -38,22 +39,32 @@ public class DeviceMonitorController {
     @Autowired
     private DeviceMonitorServiceImpl deviceMonitorService;
 
-    @RequestMapping(value="/DeviceList",method = RequestMethod.GET)
+    @RequestMapping(value="/TodayActiveDevicesList",method = RequestMethod.GET,produces="text/html;charset=UTF-8")
     public String getCurrentDeviceNameList(HttpServletResponse response){
         List<String> l = deviceMonitorService.getDeviceNameByTimeService(new Date());
-        return JSON.toJSONString(l);
+        String json = new JSONObject().toJSONString(l);
+        return json;
     }
 
-    /**
-    * 仪器的检测样本个数
-     * 根据时间段区分,先检测样本总数，再每个时间段的样本数量
-    * */
-    /*@RequestMapping(value="/{DeviceName}/SampleSum",method=RequestMethod.GET)
-    public String getDeviceTestCount(@PathVariable("DeviceName") String deviceName,
-            HttpServletResponse response){
-        int count =0;
-        return null;
-    }*/
+    @RequestMapping(value="/TodayActiveDevicesInfo",method = RequestMethod.GET,produces="text/html;charset=UTF-8")
+    public String getTodayActiveDevicesInfo(HttpServletResponse response){
+        List<String> l = deviceMonitorService.getDeviceNameByTimeService(new Date());
+        JSONObject jsonObject =new JSONObject();
+        List<DeviceinfoEntity> list = new ArrayList<>();
+        for (String deviceName:l) {
+            DeviceinfoEntity deviceinfoEntity = deviceMonitorService.getDeviceAllInfoService(deviceName);
+            list.add(deviceinfoEntity);
+        }
+
+        String json = jsonObject.toJSONString(list);
+        return json;
+    }
+
+    @RequestMapping(value="/HistoryDevicesInfo",method = RequestMethod.GET,produces="text/html;charset=UTF-8")
+    public String getCurrentDeviceInfo(HttpServletResponse response){
+        List<DeviceinfoEntity> l = deviceMonitorService.getAllDevicesInfoService();
+        return JSON.toJSONString(l);
+    }
 
     /**
      *
@@ -69,11 +80,11 @@ public class DeviceMonitorController {
                                  @PathVariable("DeviceItem") String deviceItem){
         String json = null;
         switch(deviceItem){
-            case "AllDeviceInfo":{
-                DeviceinfoEntity deviceinfoEntity = deviceMonitorService.getAllDeviceInfoService(deviceName);
+            case "DeviceAllInfo":{
+                DeviceinfoEntity deviceinfoEntity = deviceMonitorService.getDeviceAllInfoService(deviceName);
                 JSONObject jsonObject =new JSONObject();
                 jsonObject.put("DeviceName",deviceName);
-                jsonObject.put("AllDeviceInfo0",deviceinfoEntity);
+                jsonObject.put("AllDeviceInfo",deviceinfoEntity);
                 json = jsonObject.toJSONString();
                 break;
             }

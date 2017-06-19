@@ -29,7 +29,7 @@ public class Utils {
         return  cal.getTime();
     }
 
-    public static Date getTimeBeforeOneHour(Date date) {
+    public static Date getTimeBeforeTwoHour(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.set(Calendar.HOUR_OF_DAY, cal.get(Calendar.HOUR_OF_DAY)-1);

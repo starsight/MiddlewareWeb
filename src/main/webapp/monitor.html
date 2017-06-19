@@ -1,10 +1,857 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title></title>
+    <link href="static/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="static/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+
+    <link rel="stylesheet" href="static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/css/bootstrap-table.css">
+
+
+    <script type="text/javascript" src="static/jquery/jquery-3.2.1.min.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="static/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="static/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+
+    <script src="static/js/bootstrap-table.min.js"></script>
+    <script src="static/js/locales/bootstrap-table-zh-CN.min.js"></script>
+    <script type="text/javascript" src="static/js/bootstrap-table-export.js" charset="UTF-8"></script>
+    <script src="static/js/tableExport.js"></script>
+
+    <script src="static/js/Chart.bundle.js"></script>
+    <script src="static/js/utils.js"></script>
+    <style>
+        canvas{
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+        }
+    </style>
+
+    <link href="static/css/monitor.css" rel="stylesheet">
 </head>
 <body>
+
+<hr>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8" align="right">
+            <label  class="col-md-2 control-label form-tittle">设备监控</label>
+        </div>
+    </div>
+    <hr>
+</div>
+
+<p></p>
+
+<div align="center" id="todayDevices">
+    <label  class="control-label">今日活动设备</label>
+</div>
+
+<div align="center" class="form-center" style="width:50%;">
+    <canvas id="todayActiveDevicesCanvas" align="center" ></canvas>
+</div>
+<hr>
+<div align="center" id="devicesSamplesSum">
+    <label  class="control-label">设备检测样本数</label>
+</div>
+
+<div class="container">
+    <table id="todaySamplesTable"
+           data-striped="true"
+           data-toolbar="#toolbar"
+           data-search="true"
+           data-show-refresh="true"
+           data-show-toggle="true"
+           data-show-columns="true"
+           data-show-export="true"
+           data-detail-view="false"
+           data-detail-formatter="detailFormatter"
+           data-minimum-count-columns="2"
+           data-show-pagination-switch="true"
+           data-pagination="true"
+           data-id-field="id"
+           data-page-list="[10, 25, 50, 100, ALL]"
+           data-show-footer="false"
+           data-side-pagination="client"
+           data-response-handler="responseHandler">
+    </table>
+</div>
+<hr>
+<div align="center" id="newSamplesSum">
+    <label  class="control-label">实时检测样本结果</label>
+</div>
+<div class="container">
+    <table id="newSamplesTable"
+           data-striped="true"
+           data-toolbar="#toolbar"
+           data-search="true"
+           data-show-refresh="true"
+           data-show-toggle="true"
+           data-show-columns="true"
+           data-show-export="true"
+           data-detail-view="true"
+           data-detail-formatter="detailFormatter"
+           data-minimum-count-columns="2"
+           data-show-pagination-switch="true"
+           data-pagination="true"
+           data-id-field="id"
+           data-page-list="[10, 25, 50, 100, ALL]"
+           data-show-footer="false"
+           data-side-pagination="client"
+           data-response-handler="responseHandler">
+    </table>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6" >
+
+            <div style="width:85%;" align="bottom">
+                <canvas id="canvasPAC"></canvas>
+            </div>
+
+        </div>
+        <div class="col-md-6">
+
+            <div style="width:100%;">
+                <canvas id="canvasPLTRBC"></canvas>
+            </div>
+
+        </div>
+    </div>
+    <hr>
+</div>
+
+
+<p></p>
+<div  align="center" id="historyDevice">
+    <label  class="control-label">历史设备</label>
+</div>
+
+<div class="container">
+    <table id="table"
+           data-striped="true"
+           data-toolbar="#toolbar"
+           data-search="true"
+           data-show-refresh="true"
+           data-show-toggle="true"
+           data-show-columns="true"
+           data-show-export="true"
+           data-detail-view="false"
+           data-detail-formatter="detailFormatter"
+           data-minimum-count-columns="2"
+           data-show-pagination-switch="true"
+           data-pagination="true"
+           data-id-field="id"
+           data-page-list="[10, 25, 50, 100, ALL]"
+           data-show-footer="false"
+           data-side-pagination="client"
+           data-response-handler="responseHandler">
+    </table>
+</div>
+
+
+<hr>
+
+
+
+<script type="text/javascript">
+
+    function getNowTime() {//将当前时间转换成yyyymmdd格式
+        var mydate = new Date();
+        var str = "" + mydate.getFullYear() + "-";
+        var mm = mydate.getMonth() + 1
+        if (mydate.getMonth() > 9) {
+            str += mm + "-";
+        }
+        else {
+            str += "0" + mm + "-";
+        }
+        if (mydate.getDate() > 9) {
+            str += mydate.getDate();
+        }
+        else {
+            str += "0" + mydate.getDate();
+        }
+        return str;
+    }
+
+
+
+
+    $(function () {
+//        $("#remove").click(function () {
+//            $('#table').bootstrapTable('removeAll');
+//        });
+        initLine();
+        getTodayActiveDevicesInfo();
+        getNewSamples();
+        getHistoryDevices();
+        setInterval(refreshAll,30000);// 注意函数名没有引号和括弧！
+        // 使用setInterval("show()",30000);会报“缺少对象”
+    });
+
+    function refreshAll(){
+        initLine();
+        getTodayActiveDevicesInfo();
+        getNewSamples();
+        getHistoryDevices();
+    }
+
+    /**
+     * 获取今天活动设备的信息，主要使用每个时间段检测的样本数
+     * */
+    function getTodayActiveDevicesInfo(){
+        $.ajax({
+            type: "GET",
+            url: "/MiddlewareWeb/DeviceMonitor/TodayActiveDevicesInfo",
+            dataType: "html",
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            success: function (msg) {
+                var jsonText = JSON.parse(msg);
+                //document.getElementById("myDiv").innerHTML=msg;
+                var key;
+                var rows = [];
+                var canvasY = [0,0,0,0,0,0,0,0,0,0,0,0];
+                for (key in jsonText) {
+                        var value = jsonText[key];
+                        rows.push({
+                            deviceName: value.deviceName,
+                            sampleCount0: value.sampleCount0,
+                            sampleCount2: value.sampleCount2,
+                            sampleCount4: value.sampleCount4,
+                            sampleCount6: value.sampleCount6,
+                            sampleCount8: value.sampleCount8,
+                            sampleCount10: value.sampleCount10,
+                            sampleCount12: value.sampleCount12,
+                            sampleCount14: value.sampleCount14,
+                            sampleCount16: value.sampleCount16,
+                            sampleCount18: value.sampleCount18,
+                            sampleCount20: value.sampleCount20,
+                            sampleCount22: value.sampleCount22
+                        });
+                    canvasY[0] += value.sampleCount0;
+                    canvasY[1] += value.sampleCount2;
+                    canvasY[2] += value.sampleCount4;
+                    canvasY[3] += value.sampleCount6;
+                    canvasY[4] += value.sampleCount8;
+                    canvasY[5] += value.sampleCount10;
+                    canvasY[6] += value.sampleCount12;
+                    canvasY[7] += value.sampleCount14;
+                    canvasY[8] += value.sampleCount16;
+                    canvasY[9] += value.sampleCount18;
+                    canvasY[10] += value.sampleCount20;
+                    canvasY[11] += value.sampleCount22;
+                }
+                $('#todaySamplesTable').bootstrapTable('load', rows);
+
+                /**
+                ***隐藏当前时间点之后的时间（因为此时的数据时前一天的数据）
+                **/
+                var hour = getIntegralTime();
+                for(;hour<24;hour+=2){
+                    $('#todaySamplesTable').bootstrapTable('hideColumn', "sampleCount"+hour);
+                    canvasY[hour/2]=0;
+                }
+                
+                //$('#todaySamplesTable').bootstrapTable('hideColumn', "sampleCount0");
+                //var $table = $('#table');
+                //buildTable($table, 7, 1);
+
+                /**
+                 * 显示所有设备的检测数据
+                 * */
+                showTodayActiveDevicesChart(canvasY);
+            },
+            error: function () {
+                alert("获取数据失败！");
+            }
+        });
+    }
+    function  getNewSamples() {
+        //清空
+        $('#newSamplesTable').bootstrapTable('removeAll');
+        toggleCanvas();
+
+        $.ajax({
+            type: "GET",
+            url: "/MiddlewareWeb/"+"DeviceMonitor/TodayActiveDevicesList",
+            dataType: "html",
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            success: function (msg) {
+                var jsonText = JSON.parse(msg);
+                //document.getElementById("myDiv").innerHTML=msg;
+                var key;
+                var rows = [];
+                for (key in jsonText) {
+                    var value = jsonText[key];
+                    getNewSamplesInfo(value);
+
+                }
+            },
+            error: function () {
+                alert("获取数据失败！");
+            }
+        });
+
+    }
+
+    function  getNewSamplesInfo(device) {
+        $.ajax({
+            type: "GET",
+            url: "/MiddlewareWeb/DeviceMonitor/"+device+"/NewSample",
+            dataType: "html",
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            success: function (msg) {
+                var jsonText = JSON.parse(msg);
+                //document.getElementById("myDiv").innerHTML=msg;
+                var key;
+                var rows = [];
+                for (key in jsonText) {
+                    if (jsonText.hasOwnProperty(key)) {
+                        var value = jsonText[key];
+                        rows.push({//只获取一个
+                            barCode: value[0].barCode,
+                            sampleId: value[0].sampleId,
+                            firstName: value[0].firstName,
+                            patientId: value[0].patientId,
+                            sex: value[0].sex,
+                            device: value[0].device,
+                            sampleKind: value[0].sampleKind,
+                            testTime: value[0].testTime,
+                            aap: value[0].aap
+                        });
+                    }
+                }
+                $('#newSamplesTable').bootstrapTable('prepend', rows);
+            },
+            error: function () {
+                alert("获取数据失败！");
+            }
+        });
+    }
+    /**
+     * 历史设备查询函数
+     * */
+    function getHistoryDevices () {
+        //$('#table').bootstrapTable('removeAll');
+        $.ajax({
+            type: "GET",
+            url: "/MiddlewareWeb/DeviceMonitor/HistoryDevicesInfo",
+            dataType: "html",
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            success: function (msg) {
+                var jsonText = JSON.parse(msg);
+                //document.getElementById("myDiv").innerHTML=msg;
+                var key;
+                var rows = [];
+                for (key in jsonText) {
+                    var value = jsonText[key];
+                    rows.push({//只获取一个
+                        deviceName: value.deviceName,
+                        state: value.state,
+                        lastQueryTime: getTime(value.lastQueryTime),
+                        sampleSum:value.sampleSum,
+                        averageDetectionTime:value.averageDetectionTime,
+                        sampleDetectionQuality:value.sampleDetectionQuality,
+                        lastActiveTime:getTime(value.lastActiveTime)
+                    });
+                }
+                $('#table').bootstrapTable('load', rows);
+                //var $table = $('#table');
+                //buildTable($table, 7, 1);
+            },
+            error: function () {
+                alert("获取数据失败！");
+            }
+        });
+    }
+
+    $('#table').bootstrapTable({
+        columns: [{
+            field: 'deviceName',
+            title: '设备名'
+        }, {
+            field: 'state',
+            title: '设备状态'
+        }, {
+            field: 'lastQueryTime',
+            title: '上次查询时间'
+        }, {
+            field: 'sampleSum',
+            title: '检测样本总数'
+        }, {
+            field: 'averageDetectionTime',
+            title: '平均样本检测时间'
+        }, {
+            field: 'sampleDetectionQuality',
+            title: '样本检测质量'
+        }, {
+            field: 'lastActiveTime',
+            title: '最后活动时间'
+        }], onRefresh: function (param) {
+            getHistoryDevices();
+        }
+    });
+
+    $('#todaySamplesTable').bootstrapTable({
+        columns: [{
+            field: 'deviceName',
+            title: '设备名'
+        }, {
+            field: 'sampleCount0',
+            title: '0-2点'
+        }, {
+            field: 'sampleCount2',
+            title: '2-4点'
+        },{
+            field: 'sampleCount4',
+            title: '4-6点'
+        }, {
+            field: 'sampleCount6',
+            title: '6-8点'
+        }, {
+            field: 'sampleCount8',
+            title: '8-10点'
+        }, {
+            field: 'sampleCount10',
+            title: '10-12点'
+        }, {
+            field: 'sampleCount12',
+            title: '12-14点'
+        },{
+            field: 'sampleCount14',
+            title: '14-16点'
+        },{
+            field: 'sampleCount16',
+            title: '16-18点'
+        },{
+            field: 'sampleCount18',
+            title: '18-20点'
+        },{
+            field: 'sampleCount20',
+            title: '20-22点'
+        },{
+            field: 'sampleCount22',
+            title: '22-24点'
+        }], onRefresh: function (param) {
+            getTodayActiveDevicesInfo();
+        }
+    });
+
+
+    $('#newSamplesTable').bootstrapTable({
+        columns: [{
+            field: 'barCode',
+            title: '编号'
+        }, {
+            field: 'sampleId',
+            title: '样本 ID'
+        }, {
+            field: 'patientId',
+            title: '病人 ID'
+        }, {
+            field: 'firstName',
+            title: '病人姓名'
+        }, {
+            field: 'sex',
+            title: '性别'
+        }, {
+            field: 'aap',
+            title: '诱聚剂'
+        }, {
+            field: 'device',
+            title: '测试仪器'
+        }, {
+            field: 'sampleKind',
+            title: '测试类别'
+        }, {
+            field: 'testTime',
+            title: '检测时间'
+        }], onExpandRow: function (index, row, $detail) {
+            expandTable($detail, row, 8);
+        }, onRefresh: function (param) {
+            getNewSamples();
+        }
+    });
+    /*window.onload = function() {
+     initLine();
+     };*/
+
+    
+    var configLine = {
+        type: 'line',
+        data: {
+            labels: [0,2,4,6,8,10,12,14,16,18,20,22],
+            datasets: []
+        },
+        options: {
+            responsive: true,
+            legend: {
+                labels: {
+                    usePointStyle: false
+                }
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false,
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true
+            },
+            scales: {
+                xAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: false,
+                        labelString: 'Month'
+                    },gridLines:{
+                        display:false
+                    }
+                }],
+                yAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: false,
+                        labelString: 'Value'
+                    }
+                }]
+            }
+        }
+    };
+
+    function initLine() {
+
+        var ctx = document.getElementById("todayActiveDevicesCanvas").getContext("2d");
+        window.LineTodayActiveDevices = new Chart(ctx, configLine);
+
+    }
+
+    function showTodayActiveDevicesChart(result) {
+
+        var newDataset = {
+            label: '今日活动设备检测样本总数',
+            backgroundColor: window.chartColors.blue,
+            borderColor: window.chartColors.blue,
+            data: [],
+            fill: false
+        };
+
+        for (var i = 0; i < result.length; i++)
+        {
+            newDataset.data.push(result[i]);
+        }
+        //newDataset.pointRadius =0;
+        configLine.data.datasets.push(newDataset);
+        window.LineTodayActiveDevices.update();
+    }
+
+    var canvasPLTRBCLabel=[];
+    for(var i=0;i<255;i++){
+        canvasPLTRBCLabel[i] =i;
+    }
+
+    var configPLTRBC = {
+        type: 'line',
+        data: {
+            labels: canvasPLTRBCLabel,
+            datasets: []
+        },
+        options: {
+            responsive: true,
+            title:{
+                display:false,
+                text:'Chart.js Line Chart'
+            },
+            legend: {
+                labels: {
+                    usePointStyle: false
+                }
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false,
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true
+            },
+
+            scales: {
+                xAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: false,
+                        labelString: 'Month'
+                    },
+                    ticks: {
+                        autoSkip: true,
+                        maxTicksLimit: 20
+                    },gridLines:{
+                        display:false
+                    }
+                }],
+                yAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: false,
+                        labelString: 'Value'
+                    },
+                    ticks:{
+                        beginAtZero:true
+                    }
+                }]
+            }
+        }
+    };
+
+    var configPAC = {
+        type: 'line',
+        data: {
+            labels: [1,2,3,4,5],
+            datasets: []
+        },
+        options: {
+            responsive: true,
+            legend: {
+                labels: {
+                    usePointStyle: false
+                }
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false,
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true
+            },
+            scales: {
+                xAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: false,
+                        labelString: 'Month'
+                    },gridLines:{
+                        display:false
+                    }
+                }],
+                yAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: false,
+                        labelString: 'Value'
+                    },
+                }]
+            }
+        }
+    };
+
+    function showPACChart(result) {
+
+        var newDataset = {
+            label: 'PAC 直方图',
+            backgroundColor: window.chartColors.blue,
+            borderColor: window.chartColors.blue,
+            data: [],
+            fill: false
+        };
+
+        for (var i = 0; i < result.length; i++)
+        {
+            newDataset.data.push(result[i]);
+        }
+        //newDataset.pointRadius =0;
+        configPAC.data.datasets.push(newDataset);
+        window.myLinePAC.update();
+    }
+
+    function showPLTRBCCharts(result,label,color1,color2) {
+
+
+        var newDataset = {
+            label: label,
+            backgroundColor: color1,
+            borderColor: color2,
+            data: [],
+            fill: false
+        };
+
+        for (var i = 0, j = 0; i < result.length / 2; i++)
+        {
+            newDataset.data.push(parseInt(result.substr(j, 2), 16));
+            j = j + 2;
+        }
+        newDataset.pointRadius =0;
+        configPLTRBC.data.datasets.push(newDataset);
+        window.myLinePLTRBC.update();
+    }
+
+    function expandTable($detail,row, cells) {
+        configPLTRBC.data.datasets.splice(0, 2);//remove old charts
+        configPAC.data.datasets.splice(0, 1);
+        buildTable($detail.html('<table></table>').find('table'), row, cells, 1);
+    }
+
+    function buildTable($el, row, cells, rows) {
+        var sampleid = row.sampleId;
+        var devicename ="PL";
+        if(row.device.match("DS")=="DS"){
+            toggleCanvas();
+            devicename="DS";
+        }else{//PL
+            //init chart
+            var ctx = document.getElementById("canvasPLTRBC").getContext("2d");
+            window.myLinePLTRBC = new Chart(ctx, configPLTRBC);
+            var ctxpac = document.getElementById("canvasPAC").getContext("2d");
+            window.myLinePAC = new Chart(ctxpac, configPAC);
+        }
+        $el.bootstrapTable({
+            columns: [{
+                field: 'item',
+                title: '项目名'
+            }, {
+                field: 'fullName',
+                title: '项目全称'
+            }, {
+                field: 'result',
+                title: '结果'
+            }, {
+                field: 'unit',
+                title: '结果单位'
+            }, {
+                field: 'normalLow',
+                title: '正常最低值'
+            }, {
+                field: 'normalHigh',
+                title: '正常最高值'
+            }, {
+                field: 'indicate',
+                title: '提示'
+            }]
+        });
+
+        $.ajax({
+            type: "GET",
+            url: "/MiddlewareWeb/" + devicename+ "/" + devicename+ "ResultBySampleId?" + "sampleid=" + sampleid,
+            dataType: "html",
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            success: function (msg) {
+                var jsonText = JSON.parse(msg);
+                //document.getElementById("myDiv").innerHTML = msg;
+                var rows = [];
+                var pacResult = [0,0,0,0,0],pacCount=0;
+                for (var i = 0; i < jsonText.length; i++) {
+                    //data[i]表示获得第i个json对象即JSONObject
+                    //data[i]通过.字段名称即可获得指定字段的值
+                    //console.log(jsonText[i].fullName);
+                    if(jsonText[i].item!="PLTHist"&&jsonText[i].item!="RBCHist"&&jsonText[i].item.match("PAC")!="PAC") {
+                        var normallow;
+                        if(devicename=="PL"){
+                            normallow = jsonText[i].normalLOw;
+                        }else{
+                            normallow = jsonText[i].normalLow;
+                        }
+                        rows.push({
+                            item: jsonText[i].item,
+                            fullName: jsonText[i].fullName,
+                            result: jsonText[i].result,
+                            unit: jsonText[i].unit,
+                            normalLow: normallow,
+                            normalHigh: jsonText[i].normalHigh,
+                            indicate: jsonText[i].indicate
+                        });
+                    }else{//show charts
+                        if(jsonText[i].item=="RBCHist"){
+                            showPLTRBCCharts(jsonText[i].result,'RBC 直方图',window.chartColors.green,window.chartColors.green);
+                        }else if(jsonText[i].item=="PLTHist"){
+                            showPLTRBCCharts(jsonText[i].result,'PLT 直方图',window.chartColors.red,window.chartColors.red);
+                        }else{
+                            if(jsonText[i].item=="PAC1"){
+                                pacResult[0] = jsonText[i].result;
+                                pacCount++;
+                            }else if(jsonText[i].item=="PAC2"){
+                                pacResult[1] = jsonText[i].result;
+                                pacCount++;
+                            }else if(jsonText[i].item=="PAC3"){
+                                pacResult[2] = jsonText[i].result;
+                                pacCount++;
+                            }else if(jsonText[i].item=="PAC4"){
+                                pacResult[3] = jsonText[i].result;
+                                pacCount++;
+                            }else if(jsonText[i].item=="PAC5"){
+                                pacResult[4] = jsonText[i].result;
+                                pacCount++;
+                            }
+                            if(pacCount==5){
+                                showPACChart(pacResult);
+                                pacCount++;
+                            }
+                        }
+                    }
+                }
+                $el.bootstrapTable('load', rows);
+            },
+            error: function () {
+                alert("获取结果数据失败！");
+            }
+        });
+
+    }
+    /**
+     * 获取到当前时间属于0,2,4,6,10...22h的那个范围
+     * 为 隐藏今天活动设备的样本数 做准备
+     * 例：现在是 19:54 则返回18
+     * 20:05 -> 22
+     * */
+    function getIntegralTime() {
+        var date = new Date();
+        var hour = date.getHours();
+        if((hour%2)!=0)
+            return hour+1;
+        else
+            return hour+2;
+    }
+
+    function getTime(/** timestamp=0 **/) {
+        var ts = arguments[0] || 0;
+        var t,y,m,d,h,i,s;
+        t = ts ? new Date(ts) : new Date();
+        y = t.getFullYear();
+        m = t.getMonth()+1;
+        d = t.getDate();
+        h = t.getHours();
+        i = t.getMinutes();
+        s = t.getSeconds();
+        // 可根据需要在这里定义时间格式
+        return y+'-'+(m<10?'0'+m:m)+'-'+(d<10?'0'+d:d)+' '+(h<10?'0'+h:h)+':'+(i<10?'0'+i:i)+':'+(s<10?'0'+s:s);
+    }
+
+    function toggleCanvas() {
+        toggle('canvasPLTRBC');
+        toggle('canvasPAC');
+    }
+
+    function toggle(targetid){
+        if (document.getElementById){
+            var target=document.getElementById(targetid);
+            if (target.style.display=="block"){
+                target.style.display="none";
+            } else {
+                target.style.display="block";
+            }
+        }
+    }
+
+</script>
 
 </body>
 </html>

@@ -194,12 +194,13 @@
         $("#remove").click(function () {
             var rows=[];
             $('#table').bootstrapTable('load', rows);
+            toggleCanvas();
         });
 
         $("#query").click(function () {
             var datetime = $("#datetime").val() + " 00:00:00";
             var device = $("#device").val();
-
+            toggleCanvas();
             $.ajax({
                 type: "GET",
                 url: "/MiddlewareWeb/" + device + "/" + device + "ResultByTime?" + "time=" + datetime,
@@ -453,6 +454,7 @@
         var devicename ="PL";
         if(row.device.match("DS")=="DS"){
             devicename="DS";
+            toggleCanvas();
         }else{//PL
             initLine();//init chart
         }
@@ -548,6 +550,21 @@
         });
     }
 
+    function toggleCanvas() {
+        toggle('canvasPLTRBC');
+        toggle('canvasPAC');
+    }
+
+    function toggle(targetid){
+        if (document.getElementById){
+            var target=document.getElementById(targetid);
+            if (target.style.display=="block"){
+                target.style.display="none";
+            } else {
+                target.style.display="block";
+            }
+        }
+    }
 
 </script>
 

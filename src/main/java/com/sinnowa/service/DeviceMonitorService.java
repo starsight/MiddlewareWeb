@@ -19,5 +19,6 @@ public interface DeviceMonitorService {
     int getAverageDetectionTimeService(String deviceName);
     String getSampleDetectionQualityService(String deviceName);
     Date getLastActiveTimeService(String deviceName);
-    DeviceinfoEntity getAllDeviceInfoService(String deviceName);
+    DeviceinfoEntity getDeviceAllInfoService(String deviceName);
+    List<DeviceinfoEntity> getAllDevicesInfoService();
 }
