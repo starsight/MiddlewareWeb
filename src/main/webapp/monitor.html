@@ -189,7 +189,7 @@
     $(function () {
 //        $("#remove").click(function () {
 //            $('#table').bootstrapTable('removeAll');
-//        });
+//        });.l
         initLine();
         getTodayActiveDevicesInfo();
         getNewSamples();
@@ -199,7 +199,7 @@
     });
 
     function refreshAll(){
-        initLine();
+        //initLine();
         getTodayActiveDevicesInfo();
         getNewSamples();
         getHistoryDevices();
@@ -487,9 +487,9 @@
 
     
     var configLine = {
-        type: 'line',
+        type: 'bar',
         data: {
-            labels: [0,2,4,6,8,10,12,14,16,18,20,22],
+            labels: [2,4,6,8,10,12,14,16,18,20,22,24],
             datasets: []
         },
         options: {
@@ -522,6 +522,9 @@
                     scaleLabel: {
                         display: false,
                         labelString: 'Value'
+                    },
+                    ticks:{
+                        "beginAtZero":true
                     }
                 }]
             }
@@ -536,6 +539,7 @@
     }
 
     function showTodayActiveDevicesChart(result) {
+        configLine.data.datasets.pop();
 
         var newDataset = {
             label: '今日活动设备检测样本总数',
@@ -550,6 +554,9 @@
             newDataset.data.push(result[i]);
         }
         //newDataset.pointRadius =0;
+        //configLine.data.labels.pop();
+
+
         configLine.data.datasets.push(newDataset);
         window.LineTodayActiveDevices.update();
     }
@@ -649,7 +656,7 @@
                     scaleLabel: {
                         display: false,
                         labelString: 'Value'
-                    },
+                    }
                 }]
             }
         }
