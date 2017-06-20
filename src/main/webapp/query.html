@@ -194,13 +194,13 @@
         $("#remove").click(function () {
             var rows=[];
             $('#table').bootstrapTable('load', rows);
-            toggleCanvas();
+            hideCanvas();
         });
 
         $("#query").click(function () {
             var datetime = $("#datetime").val() + " 00:00:00";
             var device = $("#device").val();
-            toggleCanvas();
+            hideCanvas();
             $.ajax({
                 type: "GET",
                 url: "/MiddlewareWeb/" + device + "/" + device + "ResultByTime?" + "time=" + datetime,
@@ -284,7 +284,7 @@
             field: 'testTime',
             title: '检测时间'
         }], onExpandRow: function (index, row, $detail) {
-
+            hideCanvas();
             expandTable($detail, row, 8);
 
         }
@@ -454,9 +454,10 @@
         var devicename ="PL";
         if(row.device.match("DS")=="DS"){
             devicename="DS";
-            toggleCanvas();
+            hideCanvas();
         }else{//PL
             initLine();//init chart
+            showCanvas();
         }
         $.ajax({
             type: "GET",
@@ -550,7 +551,7 @@
         });
     }
 
-    function toggleCanvas() {
+    /*function toggleCanvas() {
         toggle('canvasPLTRBC');
         toggle('canvasPAC');
     }
@@ -562,6 +563,34 @@
                 target.style.display="none";
             } else {
                 target.style.display="block";
+            }
+        }
+    }*/
+
+    function showCanvas() {
+        showDiv('canvasPLTRBC');
+        showDiv('canvasPAC');
+    }
+
+    function hideCanvas() {
+        hideDiv('canvasPLTRBC');
+        hideDiv('canvasPAC');
+    }
+
+    function showDiv(targetid){
+        if (document.getElementById){
+            var target=document.getElementById(targetid);
+            if (target.style.display=="none"){
+                target.style.display="block";
+            }
+        }
+    }
+
+    function hideDiv(targetid){
+        if (document.getElementById){
+            var target=document.getElementById(targetid);
+            if (target.style.display=="block"){
+                target.style.display="none";
             }
         }
     }

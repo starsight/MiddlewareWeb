@@ -43,8 +43,16 @@ public class PLServiceImpl implements DSPLService<PlLisoutputEntity> {
 
 	public JSONObject getDSPLByTime(Object[] objects){
 
-        String hql ="from PlLisoutputEntity where testTime between ? and ?";
+        String hql="";
+
+        if(objects.length==2)
+            hql ="from PlLisoutputEntity where testTime between ? and ?";
+        else if(objects.length==3)
+            hql ="from PlLisoutputEntity where testTime between ? and ? and DeviceName=?";
+
         List<PlLisoutputEntity> list = plDao.getDSPL(hql,objects);
+
+
 
         JSONObject jo = getPlJSONObject(list);
         //String str2 =JSONArray.toJSONString(joo);

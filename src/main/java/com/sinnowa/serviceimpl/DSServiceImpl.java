@@ -61,7 +61,13 @@ public class DSServiceImpl implements DSPLService<DsLisoutputEntity>{
 
     public JSONObject getDSPLByTime(Object[] objects){
 
-        String hql ="from DsLisoutputEntity where time between ? and ?";
+	    String hql="";
+
+	    if(objects.length==2)
+            hql ="from DsLisoutputEntity where time between ? and ?";
+	    else if(objects.length==3)
+	        hql ="from DsLisoutputEntity where time between ? and ? and DeviceName=?";
+
         List<DsLisoutputEntity> list = dsDao.getDSPL(hql,objects);
 
 

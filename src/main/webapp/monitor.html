@@ -194,7 +194,7 @@
         getTodayActiveDevicesInfo();
         getNewSamples();
         getHistoryDevices();
-        setInterval(refreshAll,30000);// 注意函数名没有引号和括弧！
+        setInterval(refreshAll,300000);// 注意函数名没有引号和括弧！
         // 使用setInterval("show()",30000);会报“缺少对象”
     });
 
@@ -278,7 +278,7 @@
     function  getNewSamples() {
         //清空
         $('#newSamplesTable').bootstrapTable('removeAll');
-        toggleCanvas();
+        hideCanvas();
 
         $.ajax({
             type: "GET",
@@ -476,6 +476,7 @@
             field: 'testTime',
             title: '检测时间'
         }], onExpandRow: function (index, row, $detail) {
+            hideCanvas();
             expandTable($detail, row, 8);
         }, onRefresh: function (param) {
             getNewSamples();
@@ -712,7 +713,7 @@
         var sampleid = row.sampleId;
         var devicename ="PL";
         if(row.device.match("DS")=="DS"){
-            toggleCanvas();
+            hideCanvas();
             devicename="DS";
         }else{//PL
             //init chart
@@ -720,6 +721,8 @@
             window.myLinePLTRBC = new Chart(ctx, configPLTRBC);
             var ctxpac = document.getElementById("canvasPAC").getContext("2d");
             window.myLinePAC = new Chart(ctxpac, configPAC);
+
+            showCanvas();
         }
         $el.bootstrapTable({
             columns: [{
@@ -842,18 +845,30 @@
         return y+'-'+(m<10?'0'+m:m)+'-'+(d<10?'0'+d:d)+' '+(h<10?'0'+h:h)+':'+(i<10?'0'+i:i)+':'+(s<10?'0'+s:s);
     }
 
-    function toggleCanvas() {
-        toggle('canvasPLTRBC');
-        toggle('canvasPAC');
+    function showCanvas() {
+        showDiv('canvasPLTRBC');
+        showDiv('canvasPAC');
     }
 
-    function toggle(targetid){
+    function hideCanvas() {
+        hideDiv('canvasPLTRBC');
+        hideDiv('canvasPAC');
+    }
+
+    function showDiv(targetid){
+        if (document.getElementById){
+            var target=document.getElementById(targetid);
+            if (target.style.display=="none"){
+                target.style.display="block";
+            }
+        }
+    }
+
+    function hideDiv(targetid){
         if (document.getElementById){
             var target=document.getElementById(targetid);
             if (target.style.display=="block"){
                 target.style.display="none";
-            } else {
-                target.style.display="block";
             }
         }
     }

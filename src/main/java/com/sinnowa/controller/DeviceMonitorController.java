@@ -147,8 +147,8 @@ public class DeviceMonitorController {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 //jsonObject.put("NewSample",sdf.format(new Date(l)));
 
-                JSONObject jo = dsService.getDSPLByTime(new Object[]{new Date(l),new Date()});
-                JSONObject jo2 =  plService.getDSPLByTime(new Object[]{new Date(l),new Date()});
+                JSONObject jo = dsService.getDSPLByTime(new Object[]{new Date(l),new Date(),deviceName});
+                JSONObject jo2 =  plService.getDSPLByTime(new Object[]{new Date(l),new Date(),deviceName});
                 Set<String> set =jo.keySet();
                 for(String s:set){
                     JSONArray ja = jo.getJSONArray(s);
